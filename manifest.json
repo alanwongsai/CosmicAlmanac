@@ -2,7 +2,7 @@
   "name": "Cosmic Daily",
   "short_name": "Cosmic Daily",
   "description": "Your personal daily oracle — Western zodiac, Chinese zodiac, moon phase, and a daily reading calibrated to you.",
-  "start_url": "./cosmic-daily.html",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#09080b",
   "theme_color": "#09080b",

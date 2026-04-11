@@ -44,14 +44,14 @@ Every combination of birth date × calendar date produces a unique but fully rep
 ## Hosting on GitHub Pages
 
 1. Push these files to your GitHub repo:
-   - `cosmic-daily.html`
+   - `index.html`
    - `cosmic-daily-icon.png`
    - `cosmic-daily-icon-192.png`
    - `manifest.json`
 
 2. Go to **Settings → Pages**, set source to `main` branch, root folder
 
-3. Save — your app is live at `https://yourusername.github.io/yourrepo/cosmic-daily.html`
+3. Save — your app is live at `https://yourusername.github.io/yourrepo/`
 
 ---
 
@@ -69,7 +69,7 @@ The app opens full-screen with the gold ✦ icon, like a native app.
 ## File Structure
 
 ```
-cosmic-daily.html           — entire app (HTML + CSS + JS, self-contained)
+index.html                  — entire app (HTML + CSS + JS, self-contained)
 cosmic-daily-icon.png       — 512×512 app icon
 cosmic-daily-icon-192.png   — 192×192 app icon (Android PWA)
 manifest.json               — PWA manifest
