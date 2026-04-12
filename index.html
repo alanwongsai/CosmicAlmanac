@@ -58,21 +58,38 @@
       --t2:      rgba(20,12,4,0.54);
       --t3:      rgba(20,12,4,0.34);
       --glass-panel:
-        linear-gradient(180deg,rgba(255,255,255,.82),rgba(255,255,255,.46)),
-        linear-gradient(135deg,rgba(168,130,30,.11),transparent 38%,rgba(255,255,255,.30));
+        radial-gradient(circle at 18% 0%,rgba(255,255,255,.95),transparent 38%),
+        radial-gradient(circle at 86% 14%,rgba(255,230,165,.36),transparent 34%),
+        linear-gradient(180deg,rgba(255,255,255,.84),rgba(255,255,255,.42)),
+        linear-gradient(135deg,rgba(168,130,30,.13),transparent 38%,rgba(255,255,255,.32));
       --glass-panel-soft:
-        linear-gradient(180deg,rgba(255,255,255,.70),rgba(255,255,255,.34)),
-        linear-gradient(135deg,rgba(168,130,30,.08),transparent 40%,rgba(255,255,255,.22));
+        radial-gradient(circle at 20% 0%,rgba(255,255,255,.84),transparent 36%),
+        radial-gradient(circle at 88% 16%,rgba(255,230,165,.24),transparent 34%),
+        linear-gradient(180deg,rgba(255,255,255,.72),rgba(255,255,255,.32)),
+        linear-gradient(135deg,rgba(168,130,30,.09),transparent 40%,rgba(255,255,255,.24));
       --glass-chip:
-        linear-gradient(180deg,rgba(255,255,255,.68),rgba(255,255,255,.30)),
-        linear-gradient(135deg,rgba(168,130,30,.07),transparent 42%,rgba(255,255,255,.18));
-      --glass-border: rgba(20,12,4,.11);
-      --glass-border-soft: rgba(20,12,4,.09);
+        radial-gradient(circle at 24% 0%,rgba(255,255,255,.74),transparent 35%),
+        linear-gradient(180deg,rgba(255,255,255,.68),rgba(255,255,255,.28)),
+        linear-gradient(135deg,rgba(168,130,30,.08),transparent 42%,rgba(255,255,255,.20));
+      --glass-border: rgba(126,88,16,.18);
+      --glass-border-soft: rgba(126,88,16,.13);
       --glass-inner: rgba(255,255,255,.76);
       --glass-inner-soft: rgba(255,255,255,.62);
-      --glass-shadow-strong: 0 14px 34px rgba(0,0,0,.10),inset 0 1px 0 var(--glass-inner);
-      --glass-shadow-soft: 0 8px 22px rgba(0,0,0,.08),inset 0 1px 0 var(--glass-inner-soft);
-      --glass-shadow-hover: 0 14px 30px rgba(0,0,0,.12),inset 0 1px 0 var(--glass-inner);
+      --glass-shadow-strong:
+        0 18px 44px rgba(86,58,10,.13),
+        0 6px 18px rgba(255,255,255,.42),
+        inset 0 1px 0 rgba(255,255,255,.90),
+        inset 0 -1px 0 rgba(126,88,16,.08);
+      --glass-shadow-soft:
+        0 10px 26px rgba(86,58,10,.10),
+        0 3px 12px rgba(255,255,255,.34),
+        inset 0 1px 0 rgba(255,255,255,.78),
+        inset 0 -1px 0 rgba(126,88,16,.06);
+      --glass-shadow-hover:
+        0 18px 38px rgba(86,58,10,.16),
+        0 0 24px rgba(168,130,30,.14),
+        inset 0 1px 0 rgba(255,255,255,.90),
+        inset 0 -1px 0 rgba(126,88,16,.08);
       --glass-overlay: rgba(245,240,232,.58);
     }
 
@@ -110,6 +127,16 @@
         0 3px 10px rgba(143,106,24,.22);
     }
     html[data-theme="light"] .r-lbl{color:rgba(20,12,4,.62)}
+    html[data-theme="light"] .badge,
+    html[data-theme="light"] .detail-pill,
+    html[data-theme="light"] .almanac-id,
+    html[data-theme="light"] .almanac-summary-item,
+    html[data-theme="light"] .almanac-tab{
+      box-shadow:
+        0 8px 20px rgba(86,58,10,.08),
+        inset 0 1px 0 rgba(255,255,255,.82),
+        inset 0 -1px 0 rgba(126,88,16,.05);
+    }
 
     /* date input on light bg */
     html[data-theme="light"] .date-input{
@@ -196,11 +223,19 @@
       border:1px solid var(--glass-border);border-radius:26px;
       box-shadow:var(--glass-shadow-strong);
     }
+    html[data-theme="light"] .glass{
+      backdrop-filter:blur(34px) saturate(190%) brightness(1.04);
+      -webkit-backdrop-filter:blur(34px) saturate(190%) brightness(1.04);
+    }
     .card{
       background:var(--glass-panel-soft);
       backdrop-filter:blur(20px) saturate(150%);-webkit-backdrop-filter:blur(20px) saturate(150%);
       border:1px solid var(--glass-border-soft);border-radius:22px;
       box-shadow:var(--glass-shadow-soft);
+    }
+    html[data-theme="light"] .card{
+      backdrop-filter:blur(24px) saturate(175%) brightness(1.04);
+      -webkit-backdrop-filter:blur(24px) saturate(175%) brightness(1.04);
     }
 
     /* ── LAYOUT ───────────────────────────────── */
@@ -356,6 +391,11 @@
       background:linear-gradient(135deg,rgba(255,255,255,.08),transparent 40%,transparent 62%,rgba(196,165,90,.08));
       opacity:0;transition:opacity .22s ease;
       pointer-events:none;
+    }
+    html[data-theme="light"] .interactive-card::after{
+      background:
+        radial-gradient(circle at 18% 0%,rgba(255,255,255,.48),transparent 34%),
+        linear-gradient(135deg,rgba(255,255,255,.26),transparent 42%,rgba(168,130,30,.12));
     }
     .interactive-card:hover,.interactive-card:focus-visible{
       transform:translateY(-2px);
