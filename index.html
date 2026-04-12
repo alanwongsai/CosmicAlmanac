@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -24,6 +24,72 @@
       --t1:      rgba(255,252,248,0.93);
       --t2:      rgba(255,252,248,0.50);
       --t3:      rgba(255,252,248,0.26);
+    }
+
+    /* ── LIGHT / DAY MODE ────────────────────────── */
+    html[data-theme="light"]{
+      --bg:      #f5f0e8;
+      --g0:      rgba(20,12,4,0.045);
+      --gb:      rgba(20,12,4,0.110);
+      --c0:      rgba(20,12,4,0.030);
+      --cb:      rgba(20,12,4,0.085);
+      --gold:    #a8821e;
+      --goldg:   rgba(168,130,30,0.18);
+      --t1:      rgba(20,12,4,0.88);
+      --t2:      rgba(20,12,4,0.54);
+      --t3:      rgba(20,12,4,0.34);
+    }
+
+    /* smooth theme transition */
+    html{transition:background .35s}
+    body{transition:background .35s,color .35s}
+
+    /* day background — warm sunrise sky instead of deep space */
+    html[data-theme="light"] .bg-depth{
+      background:
+        radial-gradient(ellipse 80% 45% at 50% 115%, rgba(196,165,90,.18)  0%,transparent 55%),
+        radial-gradient(ellipse 70% 50% at 50% -10%, rgba(255,230,160,.55) 0%,transparent 60%),
+        radial-gradient(ellipse 35% 70% at 0%   50%, rgba(240,225,195,.25) 0%,transparent 55%),
+        radial-gradient(ellipse 35% 70% at 100% 50%, rgba(240,225,195,.25) 0%,transparent 55%);
+    }
+    /* stars disappear in daylight */
+    html[data-theme="light"] .bg-stars{opacity:0;transition:opacity .4s}
+
+    /* glass & card shadows are lighter in day mode */
+    html[data-theme="light"] .glass{
+      box-shadow:0 8px 40px rgba(0,0,0,.10),inset 0 1px 0 rgba(255,255,255,.70);
+    }
+    html[data-theme="light"] .card{
+      box-shadow:0 4px 20px rgba(0,0,0,.07),inset 0 1px 0 rgba(255,255,255,.60);
+    }
+
+    /* app title gradient: light text reads poorly on parchment */
+    html[data-theme="light"] .app-title{
+      background:linear-gradient(135deg,rgba(20,12,4,.82) 0%,var(--gold) 52%,rgba(130,90,10,.80) 100%);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+
+    /* inactive dot darker on light bg */
+    html[data-theme="light"] .dot{background:rgba(20,12,4,.14)}
+
+    /* badge on light bg */
+    html[data-theme="light"] .badge{
+      background:rgba(20,12,4,.05);border-color:rgba(20,12,4,.10);
+    }
+
+    /* date input on light bg */
+    html[data-theme="light"] .date-input{
+      background:rgba(20,12,4,.04);border-color:rgba(20,12,4,.14);
+      color:rgba(20,12,4,.88);color-scheme:light;
+    }
+    html[data-theme="light"] .date-input:focus{
+      border-color:rgba(168,130,30,.55);background:rgba(20,12,4,.07);
+    }
+
+    /* lang / theme button hover on light */
+    html[data-theme="light"] .lang-btn:hover,
+    html[data-theme="light"] .theme-btn:hover{
+      background:rgba(20,12,4,.08);color:var(--t1);
     }
 
     html,body{
@@ -63,16 +129,19 @@
     }
     @keyframes twinkle{0%{opacity:.60}100%{opacity:1}}
 
-    /* ── LANG TOGGLE ──────────────────────────── */
-    .lang-btn{
-      position:fixed;top:max(18px,env(safe-area-inset-top,18px));right:18px;z-index:200;
+    /* ── LANG + THEME TOGGLES ────────────────── */
+    .lang-btn,.theme-btn{
+      position:fixed;top:max(18px,env(safe-area-inset-top,18px));z-index:200;
       background:var(--g0);border:1px solid var(--gb);
       backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);
       border-radius:20px;padding:6px 14px;
       font-size:13px;font-weight:500;color:var(--t2);
       cursor:pointer;font-family:inherit;transition:all .2s;letter-spacing:.4px;
     }
-    .lang-btn:hover{background:rgba(255,252,248,.09);color:var(--t1)}
+    .lang-btn {right:18px}
+    .theme-btn{left:18px;font-size:15px;padding:5px 11px;letter-spacing:0}
+    .lang-btn:hover {background:rgba(255,252,248,.09);color:var(--t1)}
+    .theme-btn:hover{background:rgba(255,252,248,.09);color:var(--t1)}
 
     /* ── GLASS ────────────────────────────────── */
     .glass{
@@ -207,6 +276,7 @@
   <div class="bg-stars"></div>
 </div>
 
+<button class="theme-btn" id="theme-btn" onclick="toggleTheme()" aria-label="Toggle day/night mode">☀️</button>
 <button class="lang-btn" id="lang-btn" onclick="toggleLang()">中文</button>
 
 <!-- ═══ ONBOARDING ═══ -->
@@ -1369,6 +1439,27 @@ function $ (id){return document.getElementById(id)}
 function tx(id,v){$(id).textContent=v}
 
 // ═══════════════════════════════════════════════════════════════
+//  THEME
+// ═══════════════════════════════════════════════════════════════
+let theme = localStorage.getItem('cosmic_theme')
+  || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+
+function applyTheme(t){
+  theme = t;
+  document.documentElement.dataset.theme = t;
+  $('theme-btn').textContent = t === 'dark' ? '☀️' : '🌙';
+  $('theme-btn').setAttribute('aria-label', t === 'dark' ? 'Switch to day mode' : 'Switch to night mode');
+  // Update PWA theme-color meta
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if(meta) meta.content = t === 'dark' ? '#09080b' : '#f5f0e8';
+  localStorage.setItem('cosmic_theme', t);
+}
+
+function toggleTheme(){
+  applyTheme(theme === 'dark' ? 'light' : 'dark');
+}
+
+// ═══════════════════════════════════════════════════════════════
 //  APP STATE
 // ═══════════════════════════════════════════════════════════════
 let lang = localStorage.getItem('cosmic_lang') || 'en';
@@ -1496,6 +1587,7 @@ function renderReading(bday){
 //  INIT
 // ═══════════════════════════════════════════════════════════════
 function init(){
+  applyTheme(theme);
   applyStaticLang();
   const bday=localStorage.getItem('cosmic_bday');
   if(bday){show('reading');renderReading(bday);}
