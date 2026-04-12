@@ -24,6 +24,23 @@
       --t1:      rgba(255,252,248,0.93);
       --t2:      rgba(255,252,248,0.50);
       --t3:      rgba(255,252,248,0.26);
+      --glass-panel:
+        linear-gradient(180deg,rgba(255,255,255,.095),rgba(255,255,255,.03)),
+        linear-gradient(135deg,rgba(196,165,90,.11),transparent 38%,rgba(255,255,255,.045));
+      --glass-panel-soft:
+        linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.022)),
+        linear-gradient(135deg,rgba(196,165,90,.08),transparent 40%,rgba(255,255,255,.03));
+      --glass-chip:
+        linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.028)),
+        linear-gradient(135deg,rgba(196,165,90,.06),transparent 42%,rgba(255,255,255,.028));
+      --glass-border: rgba(255,252,248,.096);
+      --glass-border-soft: rgba(255,252,248,.08);
+      --glass-inner: rgba(255,255,255,.10);
+      --glass-inner-soft: rgba(255,255,255,.07);
+      --glass-shadow-strong: 0 18px 46px rgba(0,0,0,.34),inset 0 1px 0 var(--glass-inner);
+      --glass-shadow-soft: 0 10px 26px rgba(0,0,0,.24),inset 0 1px 0 var(--glass-inner-soft);
+      --glass-shadow-hover: 0 16px 36px rgba(0,0,0,.26),inset 0 1px 0 var(--glass-inner);
+      --glass-overlay: rgba(7,6,10,.52);
     }
 
     /* ── LIGHT / DAY MODE ────────────────────────── */
@@ -38,6 +55,23 @@
       --t1:      rgba(20,12,4,0.88);
       --t2:      rgba(20,12,4,0.54);
       --t3:      rgba(20,12,4,0.34);
+      --glass-panel:
+        linear-gradient(180deg,rgba(255,255,255,.82),rgba(255,255,255,.46)),
+        linear-gradient(135deg,rgba(168,130,30,.11),transparent 38%,rgba(255,255,255,.30));
+      --glass-panel-soft:
+        linear-gradient(180deg,rgba(255,255,255,.70),rgba(255,255,255,.34)),
+        linear-gradient(135deg,rgba(168,130,30,.08),transparent 40%,rgba(255,255,255,.22));
+      --glass-chip:
+        linear-gradient(180deg,rgba(255,255,255,.68),rgba(255,255,255,.30)),
+        linear-gradient(135deg,rgba(168,130,30,.07),transparent 42%,rgba(255,255,255,.18));
+      --glass-border: rgba(20,12,4,.11);
+      --glass-border-soft: rgba(20,12,4,.09);
+      --glass-inner: rgba(255,255,255,.76);
+      --glass-inner-soft: rgba(255,255,255,.62);
+      --glass-shadow-strong: 0 14px 34px rgba(0,0,0,.10),inset 0 1px 0 var(--glass-inner);
+      --glass-shadow-soft: 0 8px 22px rgba(0,0,0,.08),inset 0 1px 0 var(--glass-inner-soft);
+      --glass-shadow-hover: 0 14px 30px rgba(0,0,0,.12),inset 0 1px 0 var(--glass-inner);
+      --glass-overlay: rgba(245,240,232,.58);
     }
 
     /* smooth theme transition */
@@ -54,14 +88,6 @@
     }
     /* stars disappear in daylight */
     html[data-theme="light"] .bg-stars{opacity:0;transition:opacity .4s}
-
-    /* glass & card shadows are lighter in day mode */
-    html[data-theme="light"] .glass{
-      box-shadow:0 8px 40px rgba(0,0,0,.10),inset 0 1px 0 rgba(255,255,255,.70);
-    }
-    html[data-theme="light"] .card{
-      box-shadow:0 4px 20px rgba(0,0,0,.07),inset 0 1px 0 rgba(255,255,255,.60);
-    }
 
     /* app title gradient: light text reads poorly on parchment */
     html[data-theme="light"] .app-title{
@@ -83,24 +109,14 @@
     }
     html[data-theme="light"] .r-lbl{color:rgba(20,12,4,.62)}
 
-    /* badge on light bg */
-    html[data-theme="light"] .badge{
-      background:rgba(20,12,4,.05);border-color:rgba(20,12,4,.10);
-    }
-
     /* date input on light bg */
     html[data-theme="light"] .date-input{
-      background:rgba(20,12,4,.04);border-color:rgba(20,12,4,.14);
+      background:var(--glass-chip);border-color:rgba(20,12,4,.14);
       color:rgba(20,12,4,.88);color-scheme:light;
+      box-shadow:var(--glass-shadow-soft);
     }
     html[data-theme="light"] .date-input:focus{
-      border-color:rgba(168,130,30,.55);background:rgba(20,12,4,.07);
-    }
-
-    /* lang / theme button hover on light */
-    html[data-theme="light"] .lang-btn:hover,
-    html[data-theme="light"] .theme-btn:hover{
-      background:rgba(20,12,4,.08);color:var(--t1);
+      border-color:rgba(168,130,30,.55);background:var(--glass-panel-soft);
     }
 
     html,body{
@@ -144,30 +160,37 @@
     /* ── LANG + THEME TOGGLES ────────────────── */
     .lang-btn,.theme-btn{
       position:fixed;top:max(18px,env(safe-area-inset-top,18px));z-index:200;
-      background:var(--g0);border:1px solid var(--gb);
+      background:var(--glass-chip);border:1px solid var(--glass-border-soft);
       backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);
       border-radius:20px;padding:6px 14px;
       font-size:13px;font-weight:500;color:var(--t2);
       cursor:pointer;font-family:inherit;transition:all .2s;letter-spacing:.4px;
+      box-shadow:var(--glass-shadow-soft);
     }
     .lang-btn {right:18px}
     .theme-btn{left:18px;font-size:15px;padding:5px 11px;letter-spacing:0}
-    .lang-btn:hover {background:rgba(255,252,248,.09);color:var(--t1)}
-    .theme-btn:hover{background:rgba(255,252,248,.09);color:var(--t1)}
+    .lang-btn:hover,.lang-btn:focus-visible,
+    .theme-btn:hover,.theme-btn:focus-visible{
+      background:var(--glass-panel-soft);
+      border-color:rgba(196,165,90,.24);
+      color:var(--t1);
+      transform:translateY(-1px);
+      outline:none;
+    }
 
     /* ── GLASS ────────────────────────────────── */
     .glass{
-      background:var(--g0);
+      background:var(--glass-panel);
       backdrop-filter:blur(30px) saturate(180%) brightness(1.08);
       -webkit-backdrop-filter:blur(30px) saturate(180%) brightness(1.08);
-      border:1px solid var(--gb);border-radius:26px;
-      box-shadow:0 8px 40px rgba(0,0,0,.40),inset 0 1px 0 rgba(255,252,248,.08);
+      border:1px solid var(--glass-border);border-radius:26px;
+      box-shadow:var(--glass-shadow-strong);
     }
     .card{
-      background:var(--c0);
+      background:var(--glass-panel-soft);
       backdrop-filter:blur(20px) saturate(150%);-webkit-backdrop-filter:blur(20px) saturate(150%);
-      border:1px solid var(--cb);border-radius:22px;
-      box-shadow:0 4px 20px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,252,248,.05);
+      border:1px solid var(--glass-border-soft);border-radius:22px;
+      box-shadow:var(--glass-shadow-soft);
     }
 
     /* ── LAYOUT ───────────────────────────────── */
@@ -203,14 +226,15 @@
     .field-lbl{font-size:11.5px;font-weight:600;letter-spacing:.9px;text-transform:uppercase;color:var(--t3);margin-bottom:8px}
 
     .date-input{
-      width:100%;background:rgba(255,252,248,.05);
-      border:1px solid rgba(255,252,248,.12);border-radius:16px;
+      width:100%;background:var(--glass-chip);
+      border:1px solid var(--glass-border);border-radius:16px;
       padding:15px 18px;font-size:17px;font-weight:500;color:#fff;
       margin-bottom:22px;outline:none;
       transition:border-color .2s,background .2s;
       -webkit-appearance:none;font-family:inherit;color-scheme:dark;
+      box-shadow:var(--glass-shadow-soft);
     }
-    .date-input:focus{border-color:rgba(196,165,90,.50);background:rgba(255,252,248,.09)}
+    .date-input:focus{border-color:rgba(196,165,90,.50);background:var(--glass-panel-soft)}
 
     .btn-reveal{
       width:100%;
@@ -232,10 +256,11 @@
     .signs-row{display:flex;justify-content:center;gap:7px;margin-top:13px;flex-wrap:wrap}
 
     .badge{
-      background:rgba(255,252,248,.05);border:1px solid rgba(255,252,248,.09);
+      background:var(--glass-chip);border:1px solid var(--glass-border-soft);
       backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
       border-radius:20px;padding:5px 13px;font-size:13px;color:var(--t2);
       display:flex;align-items:center;gap:5px;
+      box-shadow:var(--glass-shadow-soft);
     }
     .badge-btn{
       border:none;cursor:pointer;font-family:inherit;text-align:left;
@@ -306,64 +331,50 @@
     .interactive-card:hover,.interactive-card:focus-visible{
       transform:translateY(-2px);
       border-color:rgba(196,165,90,.28);
-      box-shadow:0 14px 34px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,252,248,.08);
+      box-shadow:var(--glass-shadow-hover);
       outline:none;
     }
     .interactive-card:hover::after,.interactive-card:focus-visible::after{opacity:1}
-    html[data-theme="light"] .interactive-card:hover,
-    html[data-theme="light"] .interactive-card:focus-visible{
-      box-shadow:0 12px 28px rgba(0,0,0,.12),inset 0 1px 0 rgba(255,255,255,.70);
-    }
 
     /* ── DETAIL POPUP ─────────────────────────── */
     .detail-modal{
       position:fixed;inset:0;z-index:500;
-      display:flex;align-items:flex-end;justify-content:center;
-      padding:20px 14px max(20px,env(safe-area-inset-bottom,20px));
-      background:rgba(7,6,10,.52);
+      display:flex;align-items:center;justify-content:center;
+      padding:max(24px,env(safe-area-inset-top,24px)) 14px max(24px,env(safe-area-inset-bottom,24px));
+      background:var(--glass-overlay);
       backdrop-filter:blur(24px) saturate(140%);
       -webkit-backdrop-filter:blur(24px) saturate(140%);
       opacity:0;pointer-events:none;
       transition:opacity .24s ease;
     }
     .detail-modal.open{opacity:1;pointer-events:auto}
-    html[data-theme="light"] .detail-modal{background:rgba(245,240,232,.58)}
     .detail-sheet{
       width:min(100%,540px);max-height:min(84vh,760px);
       overflow:auto;padding:26px 22px 22px;border-radius:30px;position:relative;
-      background:
-        linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.02)),
-        linear-gradient(135deg,rgba(196,165,90,.10),transparent 36%,rgba(255,255,255,.04));
-      transform:translateY(22px) scale(.98);
+      background:var(--glass-panel);
+      border:1px solid var(--glass-border);
+      box-shadow:var(--glass-shadow-strong);
+      transform:scale(.96);
       transition:transform .28s cubic-bezier(.2,.8,.2,1);
     }
-    .detail-modal.open .detail-sheet{transform:translateY(0) scale(1)}
-    html[data-theme="light"] .detail-sheet{
-      background:
-        linear-gradient(180deg,rgba(255,255,255,.78),rgba(255,255,255,.42)),
-        linear-gradient(135deg,rgba(168,130,30,.12),transparent 36%,rgba(255,255,255,.35));
-    }
+    .detail-modal.open .detail-sheet{transform:scale(1)}
     .detail-close{
       position:absolute;top:16px;right:16px;
       width:36px;height:36px;border:none;border-radius:50%;
-      background:rgba(255,252,248,.08);color:var(--t1);cursor:pointer;
+      background:var(--glass-chip);color:var(--t1);cursor:pointer;
       font-size:17px;font-family:inherit;transition:background .2s ease,transform .2s ease;
+      box-shadow:var(--glass-shadow-soft);
     }
-    .detail-close:hover,.detail-close:focus-visible{background:rgba(255,252,248,.14);transform:scale(1.04);outline:none}
-    html[data-theme="light"] .detail-close{background:rgba(20,12,4,.06)}
-    html[data-theme="light"] .detail-close:hover,
-    html[data-theme="light"] .detail-close:focus-visible{background:rgba(20,12,4,.10)}
+    .detail-close:hover,.detail-close:focus-visible{background:var(--glass-panel-soft);transform:scale(1.04);outline:none}
     .detail-kicker{font-size:11px;font-weight:700;letter-spacing:1.7px;text-transform:uppercase;color:var(--gold);opacity:.84;margin-bottom:10px}
     .detail-title{font-size:30px;line-height:1.08;letter-spacing:-.5px;margin-right:42px}
     .detail-sub{font-size:14px;color:var(--t2);line-height:1.55;margin-top:10px}
     .detail-facts{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 16px}
     .detail-pill{
       padding:8px 12px;border-radius:999px;
-      background:rgba(255,252,248,.06);border:1px solid rgba(255,252,248,.10);
+      background:var(--glass-chip);border:1px solid var(--glass-border-soft);
       color:var(--t2);font-size:12px;letter-spacing:.2px;
-    }
-    html[data-theme="light"] .detail-pill{
-      background:rgba(20,12,4,.05);border-color:rgba(20,12,4,.10);
+      box-shadow:var(--glass-shadow-soft);
     }
     .detail-copy{display:flex;flex-direction:column;gap:12px}
     .detail-copy p{font-size:16px;line-height:1.72;color:var(--t1)}
@@ -2254,6 +2265,7 @@ function toggleTheme(){
 // ═══════════════════════════════════════════════════════════════
 let lang = localStorage.getItem('cosmic_lang') || 'en';
 let readingState=null;
+let lastDetailTrigger=null;
 
 function toggleLang(){
   closeDetail();
@@ -2332,12 +2344,33 @@ function openDetail(payload){
   $('detail-modal').classList.add('open');
   $('detail-modal').setAttribute('aria-hidden','false');
   document.body.classList.add('modal-open');
+  requestAnimationFrame(()=>$('detail-close').focus());
 }
 
 function closeDetail(){
+  const wasOpen=$('detail-modal').classList.contains('open');
   $('detail-modal').classList.remove('open');
   $('detail-modal').setAttribute('aria-hidden','true');
   document.body.classList.remove('modal-open');
+  if(wasOpen && lastDetailTrigger && document.contains(lastDetailTrigger))lastDetailTrigger.focus();
+}
+
+function displayWesternName(idx){
+  return lang==='zh'
+    ?`${LANG.zh.westNames[idx]} · ${LANG.en.westNames[idx]}`
+    :LANG.en.westNames[idx];
+}
+
+function displayChineseZodiacName(idx){
+  return lang==='zh'
+    ?`${LANG.zh.chiNames[idx]}年 · ${LANG.en.chiNames[idx]}`
+    :LANG.en.yearOf(LANG.en.chiNames[idx]);
+}
+
+function displayMoonSignName(idx){
+  return lang==='zh'
+    ?`${LANG.zh.zodiacNames[idx]} · ${LANG.en.zodiacNames[idx]}`
+    :LANG.en.zodiacNames[idx];
 }
 
 function buildWesternDetail(idx){
@@ -2345,7 +2378,7 @@ function buildWesternDetail(idx){
   const item=D.western[idx];
   return{
     kicker:D.labels.western,
-    title:`${WEST_EMOJI[idx]} ${L.westNames[idx]}`,
+    title:`${WEST_EMOJI[idx]} ${displayWesternName(idx)}`,
     subtitle:item.range,
     facts:item.facts,
     paragraphs:[item.summary,item.extra,item.notable]
@@ -2357,7 +2390,7 @@ function buildChineseDetail(idx){
   const item=D.chinese[idx];
   return{
     kicker:D.labels.chinese,
-    title:`${CHI_EMOJI[idx]} ${lang==='zh'?L.chiNames[idx]+'年':L.yearOf(L.chiNames[idx])}`,
+    title:`${CHI_EMOJI[idx]} ${displayChineseZodiacName(idx)}`,
     subtitle:lang==='zh'
       ?`${readingState.birthYear}年出生对应生肖 · ${item.cycle}`
       :`Birth year ${readingState.birthYear} · ${item.cycle}`,
@@ -2384,7 +2417,9 @@ function buildMoonSignDetail(idx){
   const aspect=D.aspects[readingState.aspect];
   return{
     kicker:D.labels.moonSign,
-    title:`🌙 ${lang==='zh'?'月入':'Moon in'} ${L.zodiacNames[idx]}`,
+    title:lang==='zh'
+      ?`🌙 月入 ${displayMoonSignName(idx)}`
+      :`🌙 Moon in ${displayMoonSignName(idx)}`,
     subtitle:lang==='zh'?'今天情绪与本能反应的底色':"Today's emotional weather",
     facts:[sign.facts[0],sign.facts[2],`${lang==='zh'?'当前相位':'Current aspect'}: ${aspect.name}`],
     paragraphs:[
@@ -2485,7 +2520,10 @@ function getDetailPayload(type,key){
 
 function activateDetailTrigger(node){
   const payload=getDetailPayload(node.dataset.detail,node.dataset.key);
-  if(payload)openDetail(payload);
+  if(payload){
+    lastDetailTrigger=node;
+    openDetail(payload);
+  }
 }
 
 function onReadingClick(e){
