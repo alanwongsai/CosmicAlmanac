@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cosmic Almanac — Share Card</title>
+  <style>
+    /* ── Variables ─────────────────────────────────── */
+    :root {
+      --bg:    #09080b;
+      --gold:  #c4a55a;
+      --t1:    rgba(255,252,248,0.93);
+      --t2:    rgba(255,252,248,0.50);
+      --t3:    rgba(255,252,248,0.26);
+      --glass-panel:
+        linear-gradient(180deg, rgba(255,255,255,.095), rgba(255,255,255,.03)),
+        linear-gradient(135deg, rgba(196,165,90,.11), transparent 38%, rgba(255,255,255,.045));
+      --glass-chip:
+        linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.028)),
+        linear-gradient(135deg, rgba(196,165,90,.06), transparent 42%, rgba(255,255,255,.028));
+      --glass-border: rgba(255,252,248,.096);
+      --glass-inner:  rgba(255,255,255,.10);
+      --glass-shadow-strong: 0 18px 46px rgba(0,0,0,.34), inset 0 1px 0 rgba(255,255,255,.10);
+      --font-serif: "Iowan Old Style","Palatino Linotype","Book Antiqua","Baskerville","Times New Roman",serif;
+      --font-ui: -apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",system-ui,sans-serif;
+    }
+
+    /* ── Reset + page ───────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #16141a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      font-family: var(--font-ui);
+      padding: 32px 16px;
+    }
+
+    /* ── Card stage ─────────────────────────────────── */
+    .stage {
+      position: relative;
+      width: 400px;
+      height: 600px;
+      flex-shrink: 0;
+    }
+
+    /* ── Card shell ─────────────────────────────────── */
+    .card {
+      position: relative;
+      width: 400px;
+      height: 600px;
+      border-radius: 26px;
+      overflow: hidden;
+    }
+
+    /* ── Background: deep space ─────────────────────── */
+    .card-bg {
+      position: absolute;
+      inset: 0;
+      border-radius: 26px;
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+    .bg-depth {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 45% at 50% 115%, rgba(170,130,35,.07)  0%, transparent 55%),
+        radial-gradient(ellipse 65% 40% at 50%  -8%, rgba(25,20,42,.50)    0%, transparent 55%),
+        radial-gradient(ellipse 30% 70% at 0%   50%, rgba(18,14,30,.30)    0%, transparent 55%),
+        radial-gradient(ellipse 30% 70% at 100% 50%, rgba(18,14,30,.30)    0%, transparent 55%);
+    }
+
+    .bg-stars {
+      position: absolute; inset: 0;
+      background-image:
+        radial-gradient(1.2px 1.2px at  9%  17%, rgba(255,252,248,.42) 0%, transparent 100%),
+        radial-gradient(1.6px 1.6px at 28%  63%, rgba(255,252,248,.32) 0%, transparent 100%),
+        radial-gradient(1px   1px   at 43%   8%, rgba(255,252,248,.38) 0%, transparent 100%),
+        radial-gradient(2px   2px   at 62%  27%, rgba(255,252,248,.48) 0%, transparent 100%),
+        radial-gradient(1px   1px   at 80%  72%, rgba(255,252,248,.28) 0%, transparent 100%),
+        radial-gradient(1.4px 1.4px at 17%  85%, rgba(255,252,248,.40) 0%, transparent 100%),
+        radial-gradient(1px   1px   at 91%  14%, rgba(255,252,248,.25) 0%, transparent 100%),
+        radial-gradient(1.8px 1.8px at 37%  78%, rgba(255,252,248,.52) 0%, transparent 100%),
+        radial-gradient(1px   1px   at 71%  44%, rgba(255,252,248,.30) 0%, transparent 100%),
+        radial-gradient(1.2px 1.2px at 54%  91%, rgba(255,252,248,.36) 0%, transparent 100%),
+        radial-gradient(1px   1px   at 22%  35%, rgba(255,252,248,.22) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 68%  58%, rgba(255,252,248,.44) 0%, transparent 100%),
+        radial-gradient(1px   1px   at 83%  32%, rgba(255,252,248,.20) 0%, transparent 100%),
+        radial-gradient(1.3px 1.3px at 48%  52%, rgba(255,252,248,.18) 0%, transparent 100%),
+        radial-gradient(1px   1px   at  5%  70%, rgba(255,252,248,.26) 0%, transparent 100%);
+    }
+
+    /* ── Glass surface ──────────────────────────────── */
+    .card-glass {
+      position: absolute;
+      inset: 0;
+      border-radius: 26px;
+      background: var(--glass-panel);
+      background-color: rgba(255,255,255,.07); /* html2canvas fallback */
+      backdrop-filter: blur(30px) saturate(180%) brightness(1.08);
+      -webkit-backdrop-filter: blur(30px) saturate(180%) brightness(1.08);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow-strong);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 48px 32px 38px;
+      text-align: center;
+    }
+
+    /* ── Corner decorators ──────────────────────────── */
+    .corner-tl, .corner-br {
+      position: absolute;
+      font-size: 10px;
+      color: var(--gold);
+      opacity: 0.30;
+    }
+    .corner-tl { top: 18px; left: 22px; }
+    .corner-br { bottom: 18px; right: 22px; }
+
+    /* ── Top section ────────────────────────────────── */
+    .card-top {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    .star-icon {
+      font-size: 52px;
+      color: var(--gold);
+      filter: drop-shadow(0 0 18px rgba(196,165,90,.55)) drop-shadow(0 0 36px rgba(196,165,90,.22));
+      line-height: 1;
+      margin-bottom: 18px;
+      display: block;
+    }
+
+    .app-title {
+      font-family: var(--font-serif);
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: .02em;
+      line-height: 1.1;
+      background: linear-gradient(135deg, rgba(255,252,248,.96) 0%, #c4a55a 55%, rgba(255,232,180,.85) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+    }
+
+    .title-zh {
+      font-family: var(--font-ui);
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--t2);
+      letter-spacing: .12em;
+    }
+
+    /* ── Mid section ────────────────────────────────── */
+    .card-mid {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+      justify-content: center;
+      padding: 0 6px;
+    }
+
+    .divider {
+      width: 60px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity: 0.55;
+      margin: 24px auto 22px;
+    }
+
+    .tagline-en {
+      font-family: var(--font-serif);
+      font-size: 14px;
+      line-height: 1.68;
+      color: var(--t2);
+      font-style: italic;
+      letter-spacing: .01em;
+    }
+
+    .tagline-zh {
+      font-family: var(--font-ui);
+      font-size: 12.5px;
+      line-height: 1.7;
+      color: var(--t3);
+      margin-top: 10px;
+      letter-spacing: .04em;
+    }
+
+    /* ── Bottom section ─────────────────────────────── */
+    .card-bottom {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .qr-wrapper {
+      display: inline-flex;
+      padding: 12px;
+      border-radius: 18px;
+      background: var(--glass-chip);
+      background-color: rgba(255,255,255,.06); /* html2canvas fallback */
+      border: 1px solid rgba(255,252,248,.096);
+      box-shadow: 0 10px 26px rgba(0,0,0,.24), inset 0 1px 0 rgba(255,255,255,.07);
+    }
+
+    .qr-code {
+      display: block;
+      width: 140px;
+      height: 140px;
+      border-radius: 6px;
+    }
+
+    .qr-label {
+      font-family: var(--font-ui);
+      font-size: 11px;
+      color: var(--t3);
+      letter-spacing: .08em;
+      margin-top: 14px;
+    }
+
+    .qr-url {
+      font-family: var(--font-ui);
+      font-size: 10px;
+      color: rgba(255,252,248,.18);
+      letter-spacing: .03em;
+      margin-top: 5px;
+    }
+
+    /* ── Save button (outside card) ─────────────────── */
+    .save-btn {
+      background: linear-gradient(135deg, rgba(196,165,90,.22), rgba(196,165,90,.10));
+      border: 1px solid rgba(196,165,90,.36);
+      color: var(--t1);
+      font-family: var(--font-ui);
+      font-size: 13.5px;
+      font-weight: 600;
+      padding: 11px 28px;
+      border-radius: 20px;
+      cursor: pointer;
+      letter-spacing: .02em;
+      backdrop-filter: blur(10px);
+      transition: background .2s, box-shadow .2s;
+    }
+    .save-btn:hover {
+      background: linear-gradient(135deg, rgba(196,165,90,.34), rgba(196,165,90,.18));
+      box-shadow: 0 0 18px rgba(196,165,90,.20);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="stage">
+    <div class="card" id="card">
+
+      <!-- Deep space background -->
+      <div class="card-bg">
+        <div class="bg-depth"></div>
+        <div class="bg-stars"></div>
+      </div>
+
+      <!-- Glass surface -->
+      <div class="card-glass">
+        <div class="corner-tl">✦</div>
+        <div class="corner-br">✦</div>
+
+        <!-- App name -->
+        <div class="card-top">
+          <span class="star-icon">✦</span>
+          <h1 class="app-title">Cosmic Almanac</h1>
+          <div class="title-zh">宇宙日历</div>
+        </div>
+
+        <!-- Tagline -->
+        <div class="card-mid">
+          <div class="divider"></div>
+          <p class="tagline-en">Your personal oracle — calibrated to<br>the stars, the moon, and the particular<br>chaos of being you.</p>
+          <p class="tagline-zh">属于你的每日占星 — 以星辰、月相与你独特的命格为锚。</p>
+        </div>
+
+        <!-- QR code -->
+        <div class="card-bottom">
+          <div class="qr-wrapper">
+            <svg class="qr-code" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 41 41" shape-rendering="crispEdges" role="img" aria-label="QR code for https://alanwongsai.github.io/CosmicAlmanac/wechat.html">
+              <title>https://alanwongsai.github.io/CosmicAlmanac/wechat.html</title>
+              <path fill="#09080b" d="M0 0h41v41H0z"/>
+              <path stroke="#c4a55a" d="M4 4.5h7M14 4.5h1M16 4.5h1M22 4.5h4M27 4.5h1M30 4.5h7M4 5.5h1M10 5.5h1M15 5.5h2M19 5.5h2M24 5.5h1M26 5.5h1M30 5.5h1M36 5.5h1M4 6.5h1M6 6.5h3M10 6.5h1M12 6.5h1M14 6.5h1M16 6.5h1M18 6.5h1M20 6.5h1M22 6.5h6M30 6.5h1M32 6.5h3M36 6.5h1M4 7.5h1M6 7.5h3M10 7.5h1M12 7.5h1M15 7.5h2M21 7.5h1M24 7.5h1M26 7.5h1M30 7.5h1M32 7.5h3M36 7.5h1M4 8.5h1M6 8.5h3M10 8.5h1M12 8.5h3M16 8.5h9M27 8.5h1M30 8.5h1M32 8.5h3M36 8.5h1M4 9.5h1M10 9.5h1M12 9.5h1M14 9.5h2M17 9.5h2M22 9.5h1M26 9.5h1M30 9.5h1M36 9.5h1M4 10.5h7M12 10.5h1M14 10.5h1M16 10.5h1M18 10.5h1M20 10.5h1M22 10.5h1M24 10.5h1M26 10.5h1M28 10.5h1M30 10.5h7M12 11.5h3M16 11.5h1M18 11.5h1M20 11.5h1M25 11.5h3M4 12.5h1M6 12.5h5M13 12.5h2M16 12.5h1M18 12.5h1M21 12.5h1M23 12.5h1M26 12.5h2M30 12.5h5M4 13.5h6M11 13.5h2M15 13.5h1M17 13.5h1M20 13.5h2M23 13.5h3M27 13.5h1M30 13.5h2M33 13.5h2M36 13.5h1M6 14.5h7M14 14.5h1M17 14.5h4M25 14.5h2M28 14.5h3M32 14.5h1M34 14.5h2M7 15.5h2M11 15.5h1M14 15.5h1M16 15.5h2M19 15.5h1M23 15.5h5M29 15.5h1M32 15.5h5M6 16.5h1M8 16.5h7M18 16.5h1M20 16.5h2M23 16.5h1M26 16.5h4M31 16.5h3M5 17.5h2M9 17.5h1M11 17.5h3M15 17.5h2M19 17.5h1M22 17.5h3M27 17.5h2M30 17.5h1M33 17.5h1M35 17.5h2M4 18.5h1M6 18.5h1M8 18.5h1M10 18.5h1M12 18.5h2M15 18.5h6M26 18.5h1M29 18.5h3M33 18.5h3M4 19.5h4M9 19.5h1M13 19.5h1M15 19.5h2M18 19.5h2M22 19.5h4M27 19.5h4M32 19.5h3M5 20.5h1M7 20.5h6M14 20.5h3M18 20.5h2M21 20.5h1M23 20.5h1M26 20.5h1M28 20.5h2M31 20.5h2M36 20.5h1M4 21.5h2M12 21.5h1M15 21.5h1M18 21.5h1M20 21.5h4M25 21.5h1M27 21.5h1M30 21.5h2M33 21.5h4M4 22.5h8M17 22.5h3M24 22.5h1M31 22.5h2M34 22.5h2M5 23.5h1M9 23.5h1M11 23.5h1M13 23.5h2M17 23.5h2M20 23.5h1M22 23.5h1M25 23.5h2M28 23.5h2M31 23.5h6M4 24.5h2M7 24.5h1M9 24.5h2M12 24.5h2M15 24.5h2M22 24.5h2M26 24.5h1M28 24.5h2M31 24.5h3M35 24.5h2M4 25.5h1M8 25.5h1M12 25.5h3M18 25.5h6M25 25.5h1M27 25.5h1M30 25.5h1M36 25.5h1M4 26.5h1M6 26.5h6M13 26.5h2M16 26.5h3M22 26.5h1M26 26.5h1M33 26.5h3M4 27.5h1M6 27.5h3M11 27.5h2M15 27.5h2M18 27.5h1M20 27.5h1M22 27.5h1M24 27.5h3M28 27.5h2M31 27.5h1M33 27.5h4M4 28.5h1M7 28.5h2M10 28.5h1M13 28.5h1M16 28.5h1M18 28.5h1M21 28.5h1M26 28.5h1M28 28.5h5M35 28.5h1M12 29.5h1M15 29.5h1M21 29.5h1M23 29.5h2M26 29.5h1M28 29.5h1M32 29.5h1M34 29.5h1M36 29.5h1M4 30.5h7M13 30.5h3M18 30.5h2M21 30.5h1M24 30.5h2M27 30.5h2M30 30.5h1M32 30.5h1M34 30.5h2M4 31.5h1M10 31.5h1M12 31.5h6M21 31.5h2M25 31.5h1M27 31.5h2M32 31.5h5M4 32.5h1M6 32.5h3M10 32.5h1M12 32.5h1M15 32.5h1M19 32.5h2M24 32.5h1M26 32.5h1M28 32.5h6M4 33.5h1M6 33.5h3M10 33.5h1M12 33.5h1M18 33.5h2M22 33.5h4M28 33.5h2M32 33.5h1M34 33.5h3M4 34.5h1M6 34.5h3M10 34.5h1M12 34.5h2M16 34.5h2M19 34.5h2M24 34.5h1M27 34.5h1M30 34.5h2M33 34.5h1M4 35.5h1M10 35.5h1M17 35.5h3M25 35.5h2M29 35.5h2M32 35.5h3M4 36.5h7M12 36.5h1M15 36.5h5M21 36.5h1M26 36.5h3M30 36.5h2M34 36.5h2"/>
+            </svg>
+          </div>
+          <div class="qr-label">Scan to open &nbsp;·&nbsp; 扫码打开</div>
+          <div class="qr-url">alanwongsai.github.io/CosmicAlmanac</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <button class="save-btn" onclick="saveCard()">↓ Save Card as PNG</button>
+
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script>
+    function saveCard() {
+      html2canvas(document.getElementById("card"), {
+        scale: 2,
+        backgroundColor: null,
+        useCORS: true,
+        logging: false
+      }).then(canvas => {
+        const a = document.createElement("a");
+        a.download = "cosmic-almanac-wechat-share.png";
+        a.href = canvas.toDataURL("image/png");
+        a.click();
+      });
+    }
+  </script>
+</body>
+</html>
