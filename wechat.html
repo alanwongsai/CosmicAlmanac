@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>Opening Cosmic Almanac</title>
+  <style>
+    body {
+      min-height: 100vh;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      background: #09080b;
+      color: #f7efe3;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      text-align: center;
+    }
+
+    a {
+      color: #e9c98f;
+    }
+  </style>
+  <script>
+    (function loadAnalytics() {
+      if (localStorage.getItem('cosmic_analytics_opt_out') === '1') return;
+      var script = document.createElement('script');
+      script.defer = true;
+      script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+      script.setAttribute('data-cf-beacon', '{"token": "70ef6f3748dc4def9365bc384d702cc8"}');
+      document.head.appendChild(script);
+    })();
+
+    window.setTimeout(function () {
+      window.location.replace('./');
+    }, 1200);
+  </script>
+</head>
+<body>
+  <main>
+    <p>Opening Cosmic Almanac...</p>
+    <p><a href="./">Open now</a></p>
+  </main>
+</body>
+</html>
