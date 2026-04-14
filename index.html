@@ -205,8 +205,12 @@
     @keyframes twinkle{0%{opacity:.60}100%{opacity:1}}
 
     /* ── LANG + THEME TOGGLES ────────────────── */
+    .top-controls{
+      position:relative;z-index:2;width:100%;max-width:430px;margin:0 auto;
+      padding:max(18px,env(safe-area-inset-top,18px)) 18px 10px;
+      display:flex;align-items:center;justify-content:space-between;
+    }
     .lang-btn,.theme-btn{
-      position:fixed;top:max(18px,env(safe-area-inset-top,18px));z-index:200;
       background:var(--glass-chip);border:1px solid var(--glass-border-soft);
       backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);
       border-radius:20px;padding:6px 14px;
@@ -214,8 +218,7 @@
       cursor:pointer;font-family:inherit;transition:all .2s;letter-spacing:.4px;
       box-shadow:var(--glass-shadow-soft);
     }
-    .lang-btn {right:18px}
-    .theme-btn{left:18px;font-size:15px;padding:5px 11px;letter-spacing:0}
+    .theme-btn{font-size:15px;padding:5px 11px;letter-spacing:0}
     .lang-btn:hover,.lang-btn:focus-visible,
     .theme-btn:hover,.theme-btn:focus-visible{
       background:var(--glass-panel-soft);
@@ -250,14 +253,14 @@
 
     /* ── LAYOUT ───────────────────────────────── */
     .screen{
-      position:relative;z-index:1;min-height:100dvh;
+      position:relative;z-index:1;min-height:calc(100dvh - 58px);
       display:flex;flex-direction:column;align-items:center;
-      padding:max(56px,env(safe-area-inset-top,56px)) 18px max(40px,env(safe-area-inset-bottom,40px));
+      padding:18px 18px max(40px,env(safe-area-inset-bottom,40px));
     }
     .screen.hidden{display:none}
 
     /* ── ONBOARDING ───────────────────────────── */
-    #onboarding{justify-content:center;gap:30px;padding-top:90px;padding-bottom:60px}
+    #onboarding{justify-content:center;gap:30px;padding-top:20px;padding-bottom:60px}
 
     .hero{text-align:center}
     .app-icon{
@@ -305,7 +308,7 @@
     .btn-reveal:active{transform:translateY(0)}
 
     /* ── READING ──────────────────────────────── */
-    #reading{gap:13px;padding-top:58px;padding-bottom:48px}
+    #reading{gap:13px;padding-top:18px;padding-bottom:48px}
 
     .r-header{width:100%;max-width:430px;text-align:center;margin-bottom:4px}
     .r-date  {font-size:11.5px;color:var(--t3);letter-spacing:1.6px;text-transform:uppercase;margin-bottom:6px}
@@ -560,8 +563,10 @@
   <div class="bg-stars"></div>
 </div>
 
-<button class="theme-btn" id="theme-btn" onclick="toggleTheme()" aria-label="Toggle day/night mode">☀️</button>
-<button class="lang-btn" id="lang-btn" onclick="toggleLang()">中文</button>
+<div class="top-controls" aria-label="App controls">
+  <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" aria-label="Toggle day/night mode">☀️</button>
+  <button class="lang-btn" id="lang-btn" onclick="toggleLang()">中文</button>
+</div>
 
 <!-- ═══ ONBOARDING ═══ -->
 <div id="onboarding" class="screen hidden">
