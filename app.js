@@ -976,7 +976,7 @@ function init(){
   const bday=storage.get('cosmic_bday');
   if(bday){show('reading');renderReading(bday);}
   else show('onboarding');
-  if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js');
+  if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js');
 }
 
 init();

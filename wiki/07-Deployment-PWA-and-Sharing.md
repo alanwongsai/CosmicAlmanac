@@ -37,6 +37,16 @@ https://alanwongsai.github.io/CosmicAlmanac/
 
 这让应用可以被添加到手机主屏幕，并以接近原生 App 的形式打开。
 
+## Service Worker 离线缓存
+
+项目包含 `sw.js`，用于缓存应用壳资源（`index.html`、`app.css`、`app.js`、内容文件、manifest、图标）。
+
+发布时需要注意：
+
+- 如果应用壳资源有变更，记得同步更新 `sw.js` 里的 `CACHE` 版本号。
+- 版本号更新后，旧缓存会在激活阶段清理，用户会拿到新资源。
+- 如需验证，可在浏览器 DevTools 的 `Application -> Cache Storage` 观察缓存版本切换。
+
 ## iPhone 主屏幕添加
 
 1. 用 Safari 打开应用地址。
