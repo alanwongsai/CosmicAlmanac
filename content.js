@@ -4,7 +4,7 @@
 const LANG = {
 
   en: {
-    appTitle:    "Cosmic Daily",
+    appTitle:    "Cosmic Almanac",
     appSub:      "Your personal oracle — calibrated to the stars, the moon, and the particular chaos of being you.",
     obH2:        "Begin your reading",
     obP:         "Enter your date of birth once. The cosmos will remember.",
@@ -485,7 +485,7 @@ const LANG = {
   },
 
   zh: {
-    appTitle:    "每日星盘",
+    appTitle:    "Cosmic Almanac",
     appSub:      "属于你的每日占星 — 以星辰、月相与你独特的命格为锚。",
     obH2:        "开始今日占卜",
     obP:         "输入一次生日，宇宙会为你记住。",

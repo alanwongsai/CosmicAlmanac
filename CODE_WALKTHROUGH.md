@@ -1,4 +1,4 @@
-# Cosmic Daily 项目代码学习笔记
+# Cosmic Almanac 项目代码学习笔记
 
 这份笔记面向刚开始学习 coding 的读者。项目本身是一个很适合入门分析的单页网页应用：没有后端、没有构建工具、没有依赖安装。主界面和交互逻辑在 `index.html` 里，双语文案和规则内容在 `content.js` 里。
 
@@ -50,8 +50,8 @@ cosmic-daily-icon-192.png
 
 ```json
 {
-  "name": "Cosmic Daily",
-  "short_name": "Cosmic Daily",
+  "name": "Cosmic Almanac",
+  "short_name": "Cosmic Almanac",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#09080b",

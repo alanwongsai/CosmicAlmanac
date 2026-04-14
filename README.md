@@ -1,8 +1,8 @@
-# Cosmic Daily
+# Cosmic Almanac
 
 ## 中文说明
 
-Cosmic Daily 是一个双语每日星象小应用。用户只需要输入一次生日，之后每天打开都会得到一份稳定的每日解读。结果会结合出生日期、当天日期、月相、月入星座、星期行星、个人西方星座和中国生肖生成。
+Cosmic Almanac 是一个结合星座、生肖、月相与每日宜忌的双语每日神谕小应用。用户只需要输入一次生日，之后每天打开都会得到一份稳定的每日解读。结果会结合出生日期、当天日期、月相、月入星座、星期行星、个人西方星座和中国生肖生成。
 
 项目是一个轻量级静态网页应用，适合部署在 GitHub Pages，也可以添加到 iPhone 主屏幕，当作轻量级 PWA 使用。主界面在 `index.html`，文案和规则内容在 `content.js`。
 
@@ -175,7 +175,7 @@ CONTENT_DATABASE_REPORT.md  内容库规模和组合逻辑报告
 
 ## English
 
-Cosmic Daily is a bilingual daily oracle web app. Enter your birthday once, then open the app each day for a stable daily reading. The result combines your birth date, the current date, moon phase, moon-in-sign, weekday ruler, Western zodiac sign, and Chinese zodiac animal.
+Cosmic Almanac is a bilingual daily oracle web app blending zodiac signs, moon phase, weekday ruler, and personal daily guidance. Enter your birthday once, then open the app each day for a stable daily reading. The result combines your birth date, the current date, moon phase, moon-in-sign, weekday ruler, Western zodiac sign, and Chinese zodiac animal.
 
 The project is a lightweight static web app designed for GitHub Pages. The main interface lives in `index.html`, while copy and rule content live in `content.js`. It can also be added to an iPhone home screen as a lightweight PWA.
 

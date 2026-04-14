@@ -1,7 +1,7 @@
 {
-  "name": "Cosmic Daily",
-  "short_name": "Cosmic Daily",
-  "description": "Your personal daily oracle — Western zodiac, Chinese zodiac, moon phase, and a daily reading calibrated to you.",
+  "name": "Cosmic Almanac",
+  "short_name": "Cosmic Almanac",
+  "description": "A bilingual daily oracle blending zodiac signs, moon phase, weekday ruler, and personal daily guidance.",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#09080b",
