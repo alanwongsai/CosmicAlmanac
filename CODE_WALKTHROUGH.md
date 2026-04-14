@@ -9,8 +9,8 @@
 ```text
 index.html
 content.js
-vendor/html2canvas.min.js
 README.md
+CONTENT_DATABASE_REPORT.md
 manifest.json
 cosmic-daily-icon.png
 cosmic-daily-icon-192.png
@@ -32,15 +32,15 @@ cosmic-daily-icon-192.png
 
 把内容从 `index.html` 里拆出来后，后续新增文案、扩展语言或调整规则时，不需要在主页面结构和交互逻辑中来回查找。
 
-### `vendor/html2canvas.min.js`
-
-这是本地保存的截图分享依赖。分享按钮会用它把当前阅读页生成 PNG 图片；文件放在仓库里，所以部署到 GitHub Pages 时不需要访问 CDN。
-
 ### `README.md`
 
 这是给用户和开发者看的说明文档。它解释了应用是什么、如何部署到 GitHub Pages、如何添加到 iPhone 主屏幕、每日内容如何保持稳定，以及当前限制。
 
 `README.md` 不参与程序运行。浏览器打开网页时不会自动读取它。它的作用是帮助人理解项目。
+
+### `CONTENT_DATABASE_REPORT.md`
+
+这是内容库规模报告。它记录当前有多少星座、生肖、月相、宜忌组合、评分短句和弹窗扩展模板，方便后续判断内容是否足够丰富。
 
 ### `manifest.json`
 

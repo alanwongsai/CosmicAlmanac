@@ -195,7 +195,7 @@
     @keyframes twinkle{0%{opacity:.60}100%{opacity:1}}
 
     /* ── LANG + THEME TOGGLES ────────────────── */
-    .lang-btn,.theme-btn,.share-btn{
+    .lang-btn,.theme-btn{
       position:fixed;top:max(18px,env(safe-area-inset-top,18px));z-index:200;
       background:var(--glass-chip);border:1px solid var(--glass-border-soft);
       backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);
@@ -206,10 +206,8 @@
     }
     .lang-btn {right:18px}
     .theme-btn{left:18px;font-size:15px;padding:5px 11px;letter-spacing:0}
-    .share-btn{right:18px;top:max(54px,calc(env(safe-area-inset-top,18px) + 36px));font-size:12px;padding:5px 13px}
     .lang-btn:hover,.lang-btn:focus-visible,
-    .theme-btn:hover,.theme-btn:focus-visible,
-    .share-btn:hover,.share-btn:focus-visible{
+    .theme-btn:hover,.theme-btn:focus-visible{
       background:var(--glass-panel-soft);
       border-color:rgba(196,165,90,.24);
       color:var(--t1);
@@ -552,7 +550,6 @@
 
 <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" aria-label="Toggle day/night mode">☀️</button>
 <button class="lang-btn" id="lang-btn" onclick="toggleLang()">中文</button>
-<button class="share-btn" id="btn-share" type="button" onclick="shareReading()"></button>
 
 <!-- ═══ ONBOARDING ═══ -->
 <div id="onboarding" class="screen hidden">
@@ -614,7 +611,6 @@
 </div>
 
 <script src="content.js"></script>
-<script src="vendor/html2canvas.min.js"></script>
 <script>
 // ═══════════════════════════════════════════════════════════════
 //  SHARED EMOJI ARRAYS
@@ -877,7 +873,6 @@ function applyStaticLang(){
   if($('date-prev'))tx('date-prev', L.prevDay);
   if($('date-next'))tx('date-next', L.nextDay);
   if($('date-today'))tx('date-today', L.todayBtn);
-  if($('btn-share'))tx('btn-share', L.shareBtn);
   if($('detail-close'))$('detail-close').setAttribute('aria-label',L.detailClose);
   document.documentElement.lang = lang==='zh'?'zh-Hans':'en';
 }
@@ -886,7 +881,6 @@ function show(id){
   if(id!=='reading')closeDetail();
   ['onboarding','reading'].forEach(s=>$(s).classList.add('hidden'));
   $(id).classList.remove('hidden');
-  if($('btn-share'))$('btn-share').style.display=id==='reading'?'':'none';
 }
 
 function startReading(){
@@ -931,56 +925,6 @@ function jumpToToday(){
   selectedDate=localDate(new Date());
   closeDetail();
   renderReading(bday,selectedDate);
-}
-
-async function shareReading(){
-  if(!readingState || typeof html2canvas!=='function')return;
-  const L=LANG[lang];
-  const btn=$('btn-share');
-  const originalText=btn.textContent;
-  const controls=[...document.querySelectorAll('.theme-btn,.lang-btn,.share-btn')];
-  btn.disabled=true;
-  btn.textContent=L.shareBusy;
-  controls.forEach(el=>el.style.visibility='hidden');
-  try{
-    const fullHeight=Math.max(document.body.scrollHeight,document.documentElement.scrollHeight);
-    const fullWidth=Math.max(document.body.scrollWidth,document.documentElement.scrollWidth);
-    const canvas=await html2canvas(document.body,{
-      backgroundColor:getComputedStyle(document.documentElement).getPropertyValue('--bg').trim() || null,
-      scale:Math.min(2,window.devicePixelRatio||1.5),
-      useCORS:true,
-      scrollX:0,
-      scrollY:-window.scrollY,
-      width:fullWidth,
-      height:fullHeight,
-      windowWidth:fullWidth,
-      windowHeight:fullHeight
-    });
-    const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png',0.95));
-    if(!blob)throw new Error('empty image');
-    const filename=`cosmic-daily-${readingState.dateKey}.png`;
-    const file=new File([blob],filename,{type:'image/png'});
-    if(navigator.canShare && navigator.canShare({files:[file]}) && navigator.share){
-      await navigator.share({title:L.shareTitle,files:[file]});
-      return;
-    }
-    const url=URL.createObjectURL(blob);
-    const link=document.createElement('a');
-    link.href=url;
-    link.download=filename;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    setTimeout(()=>URL.revokeObjectURL(url),1000);
-    btn.textContent=L.shareSaved;
-    setTimeout(()=>{btn.textContent=originalText;},1600);
-  }catch(_){
-    btn.textContent=L.shareFail;
-    setTimeout(()=>{btn.textContent=originalText;},1600);
-  }finally{
-    controls.forEach(el=>el.style.visibility='');
-    btn.disabled=false;
-  }
 }
 
 function applyDetail(payload){
@@ -1043,6 +987,10 @@ function displayMoonSignName(idx){
   return lang==='zh'
     ?LANG.zh.zodiacNames[idx]
     :LANG.en.zodiacNames[idx];
+}
+
+function westernDisplayToDetailIdx(idx){
+  return (idx+9)%12;
 }
 
 function getAlmanacPack(){
@@ -1155,7 +1103,7 @@ function renderAlmanacCustom(config){
 
 function buildWesternDetail(idx){
   const L=LANG[lang], D=DETAILS[lang];
-  const item=D.western[idx];
+  const item=D.western[westernDisplayToDetailIdx(idx)];
   return{
     kicker:D.labels.western,
     title:`${WEST_EMOJI[idx]} ${displayWesternName(idx)}`,
@@ -1279,18 +1227,10 @@ function scoreDirection(score){
 }
 
 function buildCategoryInsight(key){
-  const L=LANG[lang], D=DETAILS[lang];
+  const L=LANG[lang];
   const score=readingState.ratings[key];
   const direction=scoreDirection(score);
-  const phase=LANG[lang].moonNames[readingState.phaseIdx];
-  const moonSign=displayMoonSignName(readingState.moonSignIdx);
-  const day=readingState.planetDayLabel;
-  const aspect=D.aspects[readingState.aspect].name;
   const label=L.rLbls[score];
-  const zh=lang==='zh';
-  const source=zh
-    ?`这个 ${score}/5 来自 ${phase}、月入${moonSign}、${day}，以及你和今日月亮之间的${aspect}共同叠加。它不是单一因素的判断，而是把今天的天象底色和你的出生星座关系合在一起看。`
-    :`This ${score}/5 comes from the combined pull of the ${phase}, Moon in ${moonSign}, ${day}, and your ${aspect} with today's Moon. It is a blended reading, not a single-factor verdict.`;
   const text={
     en:{
       work:{
@@ -1355,7 +1295,6 @@ function buildCategoryInsight(key){
   };
   const [rhythm,watch,move]=text[lang][key][direction];
   return{
-    source,
     rhythm,
     watch,
     move,
@@ -1376,7 +1315,6 @@ function buildCategoryDetail(key){
     ],
     paragraphs:[
       readingState.msgs[key],
-      `${L.detailWhy}: ${insight.source}`,
       `${L.detailRhythm}: ${insight.rhythm}`,
       `${L.detailWatch}: ${insight.watch}`,
       `${L.detailMove}: ${insight.move}`
