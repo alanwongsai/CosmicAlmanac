@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!--
+    Source layout for the 1200×630 social preview (og:image / twitter:image).
+    Render to cosmic-og.png with headless Chrome:
+      "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+        --headless --disable-gpu --hide-scrollbars --force-device-scale-factor=1 \
+        --window-size=1200,630 --screenshot=cosmic-og.png "file://$PWD/og-image.html"
+  -->
+  <title>Cosmic Almanac — Social Preview</title>
+  <style>
+    :root {
+      --bg:    #09080b;
+      --gold:  #c4a55a;
+      --t1:    rgba(255,252,248,0.93);
+      --t2:    rgba(255,252,248,0.50);
+      --t3:    rgba(255,252,248,0.26);
+      --glass-panel:
+        linear-gradient(180deg, rgba(255,255,255,.095), rgba(255,255,255,.03)),
+        linear-gradient(135deg, rgba(196,165,90,.11), transparent 38%, rgba(255,255,255,.045));
+      --glass-border: rgba(255,252,248,.096);
+      --font-serif: "Iowan Old Style","Palatino Linotype","Book Antiqua","Baskerville","Times New Roman",serif;
+      --font-ui: -apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",system-ui,sans-serif;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body { width: 1200px; height: 630px; overflow: hidden; }
+
+    body {
+      background: var(--bg);
+      font-family: var(--font-ui);
+      position: relative;
+    }
+
+    /* ── Deep space background ─────────────────────────── */
+    .bg-depth {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 50% 120%, rgba(170,130,35,.09)  0%, transparent 55%),
+        radial-gradient(ellipse 55% 50% at 50%  -12%, rgba(25,20,42,.55)   0%, transparent 55%),
+        radial-gradient(ellipse 28% 80% at 0%   50%, rgba(18,14,30,.34)    0%, transparent 55%),
+        radial-gradient(ellipse 28% 80% at 100% 50%, rgba(18,14,30,.34)    0%, transparent 55%);
+    }
+    .bg-stars {
+      position: absolute; inset: 0;
+      background-image:
+        radial-gradient(1.4px 1.4px at  7% 22%, rgba(255,252,248,.42) 0%, transparent 100%),
+        radial-gradient(1.8px 1.8px at 23% 68%, rgba(255,252,248,.32) 0%, transparent 100%),
+        radial-gradient(1.2px 1.2px at 40% 14%, rgba(255,252,248,.38) 0%, transparent 100%),
+        radial-gradient(2.2px 2.2px at 58% 30%, rgba(255,252,248,.50) 0%, transparent 100%),
+        radial-gradient(1.2px 1.2px at 88% 76%, rgba(255,252,248,.28) 0%, transparent 100%),
+        radial-gradient(1.6px 1.6px at 14% 86%, rgba(255,252,248,.40) 0%, transparent 100%),
+        radial-gradient(1.2px 1.2px at 95% 18%, rgba(255,252,248,.25) 0%, transparent 100%),
+        radial-gradient(2px   2px   at 33% 80%, rgba(255,252,248,.52) 0%, transparent 100%),
+        radial-gradient(1.2px 1.2px at 70% 50%, rgba(255,252,248,.30) 0%, transparent 100%),
+        radial-gradient(1.4px 1.4px at 52% 90%, rgba(255,252,248,.34) 0%, transparent 100%),
+        radial-gradient(1.2px 1.2px at 82% 40%, rgba(255,252,248,.22) 0%, transparent 100%),
+        radial-gradient(1.6px 1.6px at 64% 64%, rgba(255,252,248,.42) 0%, transparent 100%);
+    }
+
+    /* ── Glass frame ───────────────────────────────────── */
+    .frame {
+      position: absolute;
+      inset: 28px;
+      border-radius: 30px;
+      background: var(--glass-panel);
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 18px 46px rgba(0,0,0,.34), inset 0 1px 0 rgba(255,255,255,.10);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 80px;
+    }
+
+    .corner { position: absolute; font-size: 13px; color: var(--gold); opacity: .30; }
+    .corner.tl { top: 26px; left: 30px; }
+    .corner.br { bottom: 26px; right: 30px; }
+
+    /* ── Left: wordmark + tagline ──────────────────────── */
+    .left { max-width: 620px; }
+
+    .star-icon {
+      font-size: 60px;
+      color: var(--gold);
+      line-height: 1;
+      filter: drop-shadow(0 0 20px rgba(196,165,90,.55)) drop-shadow(0 0 40px rgba(196,165,90,.22));
+      margin-bottom: 26px;
+      display: block;
+    }
+    .app-title {
+      font-family: var(--font-serif);
+      font-size: 76px;
+      font-weight: 700;
+      letter-spacing: .01em;
+      line-height: 1.02;
+      background: linear-gradient(135deg, rgba(255,252,248,.96) 0%, #c4a55a 58%, rgba(255,232,180,.88) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .title-zh {
+      font-size: 23px;
+      color: var(--t2);
+      letter-spacing: .26em;
+      margin-top: 14px;
+    }
+    .divider {
+      width: 84px; height: 1px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+      opacity: .6;
+      margin: 30px 0 26px;
+    }
+    .tagline-en {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 22px;
+      line-height: 1.6;
+      color: var(--t2);
+    }
+    .tagline-zh {
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--t3);
+      letter-spacing: .04em;
+      margin-top: 12px;
+    }
+
+    /* ── Right: moon / zodiac motif ────────────────────── */
+    .motif { position: relative; width: 300px; height: 300px; flex-shrink: 0; }
+    .ring {
+      position: absolute; inset: 0;
+      border-radius: 50%;
+      border: 1px solid rgba(196,165,90,.32);
+      box-shadow: inset 0 0 60px rgba(196,165,90,.10), 0 0 50px rgba(196,165,90,.08);
+    }
+    .ring.inner { inset: 34px; border-color: rgba(196,165,90,.18); }
+    .moon {
+      position: absolute; inset: 70px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 38% 34%, rgba(255,248,232,.95), rgba(228,212,176,.72) 42%, rgba(150,128,82,.30) 72%, transparent 82%);
+      box-shadow: 0 0 60px rgba(255,236,196,.28), inset -16px -14px 40px rgba(20,16,10,.55);
+    }
+    .glyph {
+      position: absolute;
+      font-size: 22px;
+      color: var(--gold);
+      opacity: .82;
+      transform: translate(-50%, -50%);
+      text-shadow: 0 0 14px rgba(196,165,90,.5);
+    }
+    /* place glyphs around the ring */
+    .g1 { top: 6%;  left: 50%; }
+    .g2 { top: 50%; left: 96%; }
+    .g3 { top: 94%; left: 50%; }
+    .g4 { top: 50%; left: 4%;  }
+  </style>
+</head>
+<body>
+  <div class="bg-depth"></div>
+  <div class="bg-stars"></div>
+
+  <div class="frame">
+    <div class="corner tl">✦</div>
+    <div class="corner br">✦</div>
+
+    <div class="left">
+      <span class="star-icon">✦</span>
+      <h1 class="app-title">Cosmic Almanac</h1>
+      <div class="title-zh">宇 宙 日 历</div>
+      <div class="divider"></div>
+      <p class="tagline-en">A daily oracle, calibrated to the stars,<br>the moon, and the particular chaos of being you.</p>
+      <p class="tagline-zh">属于你的每日占星 — 以星辰、月相与你独特的命格为锚</p>
+    </div>
+
+    <div class="motif">
+      <div class="ring"></div>
+      <div class="ring inner"></div>
+      <div class="moon"></div>
+      <div class="glyph g1">☉</div>
+      <div class="glyph g2">☽</div>
+      <div class="glyph g3">✦</div>
+      <div class="glyph g4">☾</div>
+    </div>
+  </div>
+</body>
+</html>
