@@ -1071,8 +1071,18 @@ function renderReading(bday,targetDate=new Date()){
   // Messages (one random pick per category per day)
   const msgs={};
   for(const k of CAT_KEYS) msgs[k]=pick(L[k].m[ratings[k]],rng);
-  const oracle =pick(L.oracles,rng);
-  const suggest=pick(L.suggestions,rng);
+  // Profile-bound pools: pick from a bucket matched to the day's chart, falling
+  // back to the flat pool. pick() consumes exactly one rng() either way, so the
+  // downstream stream (title) and all ratings/messages are unchanged.
+  const aspectClass=(calc.asp==='trine'||calc.asp==='sextile')?'harmonious'
+    :(calc.asp==='square'||calc.asp==='opposition')?'tension':'neutral';
+  const oraclePool=(L.oraclesByProfile&&L.oraclesByProfile[mi]&&L.oraclesByProfile[mi][aspectClass])||L.oracles;
+  const oracle =pick(oraclePool,rng);
+  const domCat=CAT_KEYS.reduce((a,k)=>ratings[k]>ratings[a]?k:a,CAT_KEYS[0]);
+  const meanScore=(ratings.work+ratings.love+ratings.health+ratings.finance)/4;
+  const dayTone=meanScore>=3.6?'bright':meanScore<=2.6?'cautious':'mixed';
+  const suggestPool=(L.suggestionsByProfile&&L.suggestionsByProfile[domCat]&&L.suggestionsByProfile[domCat][dayTone])||L.suggestions;
+  const suggest=pick(suggestPool,rng);
   const rtitle =pick(L.readingTitles,rng);
 
   // Moon sign badge

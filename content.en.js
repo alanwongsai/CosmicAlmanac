@@ -891,3 +891,288 @@ const ALMANAC_EN = {
     {yi:"choose generosity with limits", ji:"relax every boundary"}
   ]
 };
+
+
+// ── Profile-bound pools (AI-authored, offline) ──────────────────
+// Oracle keyed by moonPhase(0-7) x aspectClass; suggestion by dominantCategory x dayTone.
+// Selected at runtime from the daily seed; the flat oracles/suggestions above remain as fallback.
+LANG.en.oraclesByProfile = {
+  "0": {
+    "harmonious": [
+      "Something unnamed stirs at the edge of awareness — the new moon holds its breath alongside you, and whatever you're quietly incubating has room now to take its first tentative shape.",
+      "Blank pages are the bravest kind. A gentle current runs beneath the stillness tonight, ready to carry whatever intention you're willing to commit to the dark.",
+      "Before the seed is anything, it is only a promise. Right now you stand in that exact interval — expectant, unencumbered, every door still ajar.",
+      "Ease runs ahead of you like a cleared path. What you've been waiting to begin doesn't need permission or the perfect moment; the moment has quietly arrived.",
+      "An invisible threshold is open. The harmonics align between your inner weather and the sky's reset, and whatever you plant in silence tonight takes root with unusual ease."
+    ],
+    "tension": [
+      "A new moon is supposed to be a beginning, but something in you is gripping the old ending. The friction is honest — it means the blank page is real.",
+      "Starting over and the resistance to starting over arrive at the same instant. Sit with both; the discomfort is the gap between who you were and whoever you're becoming.",
+      "The sky empties to let something new form, but your instincts are braced for a continuation that isn't coming. That bracing is information, not failure.",
+      "There's a kind of courage in beginnings made under pressure. The pull you feel isn't warning you away from the threshold — it's asking whether you mean it.",
+      "Intentions cast in tension become sharper — they have to name themselves clearly just to survive. The resistance you meet at the new moon is the forge, not the obstacle."
+    ],
+    "neutral": [
+      "No current pushes you in any direction today. The new moon offers a blank sky and a blank self — what fills either is entirely your call.",
+      "Intention lives where you put it. The day has no strong lean, which means the quality of what you begin here is drawn from the center of you, not the stars.",
+      "This is a threshold with no gust behind it. You're neither pulled forward nor held back; you simply face the open and decide how to enter.",
+      "The new moon keeps no secrets from you and offers no shortcuts. What begins today starts because you started it — full weight, full credit.",
+      "A quiet neutrality holds the space between what was and what might be. You are the first weather in this new cycle, and whatever you bring sets the tone."
+    ]
+  },
+  "1": {
+    "harmonious": [
+      "A waxing crescent rewards the tenders. What you've committed to in the dark is reaching for its first light, and the day seems to want to meet it halfway.",
+      "Something small is not nothing — it's early. The momentum gathering under a crescent sky is modest but it's yours, and right now modest is exactly the right speed.",
+      "Fragile things need consistent warmth more than dramatic effort. Today that warmth is easy to give; the spark you've been protecting is steadier than it looks.",
+      "First steps find unusually solid footing. Whatever you began at the new moon is putting down roots, and you'll feel a low hum of rightness if you stay with it.",
+      "A crescent is a door opened just enough to let light through. The ease you feel now is the invitation to take the second step, then the third — none of them need to be large."
+    ],
+    "tension": [
+      "Early momentum is never guaranteed. You feel the friction between the tender beginning and something in you — or in the day — that would rather wait for more certainty.",
+      "Commitments tested young either break or temper. What you're tending is being tested already, and the question isn't whether to keep going but how to hold it under pressure.",
+      "A crescent under tension is still crescent. The obstacle you're meeting isn't a sign the start was wrong; it's the ordinary difficulty of anything new finding its footing.",
+      "Something is pulling against the small progress you've made. Don't mistake that resistance for a verdict — the spark doesn't go out because it flickers.",
+      "The new thing you're growing meets friction before it's sturdy, and that's always a little alarming. Hold it anyway. The challenge belongs to the beginning, not to the outcome."
+    ],
+    "neutral": [
+      "A crescent sky offers no strong opinion. The commitment you made at the new moon is yours alone to honor or abandon today, and the cosmos is watching without comment.",
+      "Early days have their own quiet texture — neither triumph nor defeat, just tending. What you do with that ordinariness is what shapes the thing you're building.",
+      "This is the part of any beginning that no one finds romantic: showing up again on an ordinary day. You do it anyway, and that is the whole of it.",
+      "The crescent doesn't flare; it accumulates. Today's contribution to whatever you've started is small and real and part of a larger arc you won't see clearly from here.",
+      "Momentum without fanfare is still momentum. The neutral sky asks nothing spectacular of you — just a continued presence, a continued yes."
+    ]
+  },
+  "2": {
+    "harmonious": [
+      "First Quarter delivers a decision point and, today, your relationship with it is a favorable one. The friction here is the kind that generates traction — push and you'll find the ground holding.",
+      "Something has to give, and for once the giving feels like choice rather than loss. The fork in the road is real, but one path is lit.",
+      "Resistance at the quarter moon is how you know the work is real. That the resistance meets you without grinding you down today is a quiet gift.",
+      "A decision you've circled is ready to be made. The current runs in your direction — not because it's easy but because you've done enough of the groundwork to trust your footing.",
+      "Action is the language of a First Quarter sky. The moment is asking a direct question, and you're equipped right now to answer it directly."
+    ],
+    "tension": [
+      "A First Quarter moon is already a tension — half dark, half light, split right down the middle. With the aspect adding its own friction, you stand at a crossroads that demands you move.",
+      "The pull in two directions is not a mistake in the day's design. It is the day's design. Something important only gets decided when both options feel real.",
+      "Friction squared: the quarter moon asks you to act, and the aspect asks you to struggle first. That sequence has a logic. The struggling is the deciding.",
+      "You are being asked to choose under pressure, without enough information, before you feel ready. This is exactly when the quality of your instincts reveals itself.",
+      "The tension you carry today is not comfortable, but it is clarifying. What you can't bring yourself to abandon at the crossroads — that's your answer."
+    ],
+    "neutral": [
+      "The First Quarter's decision point hangs in the air. No current tilts the balance for you today; you arrive at the fork carrying only your own sense of direction.",
+      "This is the hinge moment in a cycle, and today the hinge turns by your hand alone. No wind is blowing you toward either choice — the choosing is entirely yours.",
+      "Half-dark, half-light, and you in between: the quarter moon doesn't resolve its own tension and today neither will the day do it for you. Your clarity is the only compass here.",
+      "A neutral day at the First Quarter isn't unresponsive — it's honest. The action called for is precisely the action you decide to take, unaided and unhindered.",
+      "Sometimes the most useful thing a day can offer is no interference. Stand at the crossroads, listen to yourself, and step."
+    ]
+  },
+  "3": {
+    "harmonious": [
+      "Almost-there is its own particular feeling — the near-completion that still requires your full attention. With the day running gently in your direction, the refinements feel within reach.",
+      "The waxing gibbous holds a kind of taut anticipation. What you've been building is rounding into form, and today the last adjustments seem to know where they belong.",
+      "Patience and proximity in equal measure: you can see what this becomes, and the current supports you in getting there. Not a sprint — a calibrated and confident closing stretch.",
+      "Close isn't done, but close under favorable conditions is an invitation to bring your full craft to the final pass. You have the light; use it well.",
+      "A waxing gibbous sky rewards the ones who stay in. The ease you feel today is not an invitation to coast but to polish — the thing you're working on deserves your best attention now."
+    ],
+    "tension": [
+      "Almost-there and running into resistance is one of the more honest descriptions of creative frustration. The thing is close; the gap between where it is and where it needs to be is real.",
+      "The waxing gibbous asks for persistence, and the tension in the day amplifies that demand. Whatever you're refining is resisting the last adjustment — stay with it anyway.",
+      "Close and not-yet coexist uncomfortably. The friction isn't telling you the work is wrong; it's telling you the work isn't done pretending to be finished when it isn't.",
+      "There is a particular discipline in persisting when you can see the end and the end keeps moving. That's the waxing gibbous in tension — the home stretch that makes you earn it.",
+      "Anticipation under pressure is a strange fuel. Something in you wants this done; something in the day is pushing back. Neither gives. You keep going anyway."
+    ],
+    "neutral": [
+      "The waxing gibbous is its own pressure — almost-there has weight. Today the day offers neither wind nor resistance, leaving the pace and quality entirely to your judgment.",
+      "What you're refining right now is mostly between you and the work. The sky holds no opinion on whether you're close enough. You are the measure.",
+      "Persistence at the waxing gibbous isn't asked for dramatically — it's the quiet act of returning to the thing one more time, making it a little more itself.",
+      "Anticipation that no one else shares is a private kind of pressure. The last stretch of anything asks you to stay focused without the help of external momentum.",
+      "You are near something. The neutral day around you is neither hurrying nor delaying what you're completing — that relationship is yours alone to navigate."
+    ]
+  },
+  "4": {
+    "harmonious": [
+      "Full moons are relentless revealers, and today you meet that revelation with open hands. What becomes visible now — about a situation, a feeling, yourself — lands with unusual clarity and no sting.",
+      "At peak light, things that were in progress become visible as outcomes. The harmony in the day lets you see what you've grown without flinching from the honest view.",
+      "Something ripens and you are ready for it. The full moon's illumination pairs today with a sense of rightness — what is being seen was ready to be seen.",
+      "Culmination isn't always loud. Under a full moon in harmony, the peak feeling might simply be a quiet recognition that something has arrived, fully itself, and so have you.",
+      "This is the night of clear seeing. Emotions run bright, and the current running with you means that what surfaces — the tender thing, the completed thing — is bearable and even beautiful."
+    ],
+    "tension": [
+      "A full moon hides nothing, and hiding would be a relief right now. What the light throws into sharp relief is real and perhaps not comfortable — that's the tension, doing its work.",
+      "Revelation under friction: the full moon shows you something you weren't ready to see, and the day makes looking away harder than facing it. The clarity hurts a little. That's clarity.",
+      "Peak feeling, peak resistance. The culmination the full moon offers doesn't feel like triumph today; it feels like reckoning. That reckoning has its own particular integrity.",
+      "Something is fully visible now whether you invited the viewing or not. The full moon in tension doesn't ask permission — and the thing illuminated is worth looking at even so.",
+      "Emotions under a full moon are always larger than usual, and today's friction amplifies them further. Let them move through you. They are information at full volume, not catastrophe."
+    ],
+    "neutral": [
+      "Peak light and no current either way: the full moon illuminates everything, and what you do with what you see is yours alone to decide. That is enormous freedom.",
+      "Culmination at the full moon carries no assigned feeling today. Joy, grief, relief, wonder — any or all of them are available. You are the container. You decide the shape.",
+      "A full moon is equally honest with everyone. Today it meets you without judgment or assistance, simply flooding the landscape of your life with light.",
+      "What has been quietly becoming is now fully arrived, and the neutral day asks nothing more of you than to acknowledge it. Seeing clearly is enough.",
+      "At peak illumination, nothing hides. The neutrality around you means there's no tilt of fate to help or hinder the seeing — only you, the moon, and what is true."
+    ]
+  },
+  "5": {
+    "harmonious": [
+      "The light is easing off and the day moves with you rather than against you. Whatever you've been ripening is ready to be shared now, and sharing it costs you nothing.",
+      "The light is softening and, for once, nothing is fighting you. What you've been carrying can be shared now — set a little of it down in someone else's hands.",
+      "There's a generosity to this stretch of the cycle, and today nothing stands in its way. What you know and what you've made are ready to be handed outward, gently.",
+      "Harvest doesn't mean you've finished the field — it means you recognize what's ready to be gathered. The ease in the day makes that recognition unusually clear.",
+      "Gratitude at the waning gibbous isn't a performance. Something real has ripened and the harmonics today let you taste it honestly — what you grew was worth growing."
+    ],
+    "tension": [
+      "The waning light and the friction of the day pull in the same direction: away from holding on. Something is asking to be released before you're sure you're ready.",
+      "Digesting what's already happened is harder than accumulating. The tension today lives in that effort — making meaning of the fullness you're moving through.",
+      "What you've been given is real. What you're being asked to give back or give away is also real. The waning gibbous under tension makes that exchange feel costly.",
+      "Gratitude and grief are not opposites at this phase — they arrive together. The tension isn't blocking the harvest; it's asking you to feel the full weight of what it cost.",
+      "A waning gibbous moon wants you to share what you've learned, and something in the day makes that sharing complicated. The difficulty is part of the offering."
+    ],
+    "neutral": [
+      "The waning gibbous is a quiet accountant. What did you actually do with the cycle that's now past its peak? Today the day withholds judgment — only you know the honest answer.",
+      "Digestion is neither dramatic nor optional. The neutral day at the waning gibbous simply asks you to sit with what's already happened and let it settle into meaning.",
+      "Something is ready to be given back — knowledge, warmth, a piece of what you've gathered. Whether you offer it today or let it accumulate a little longer is your call entirely.",
+      "The softening light of a waning moon is its own instruction. There's no pull in the day to tell you how fast to wind down; the pace is yours.",
+      "You have passed the peak and are now in the unhurried return. No current hurries or delays that return today. Gratitude at your own speed is still gratitude."
+    ]
+  },
+  "6": {
+    "harmonious": [
+      "Last Quarter asks what you're still carrying that should have been set down earlier. Today the day is gentle enough to make that honest inventory feel like relief rather than reckoning.",
+      "There is a particular grace in letting go when letting go is easy. The ease you feel at the Last Quarter is not permission to be careless — it's a rare window for clean release.",
+      "Course-correction under a favorable sky: you see where you drifted and the path back is clear. No dramatic reversal needed — a small turn made honestly is enough.",
+      "What needs clearing is clearing. The last quarter's call to release finds you ready today, and what you release makes room for something you can't yet name.",
+      "A final reckoning doesn't have to be harsh. Under a harmonious sky, even the difficult accounting — what worked, what didn't, what should have been different — lands more gently."
+    ],
+    "tension": [
+      "Last Quarter already demands release; the tension in the day makes release harder. Holding on is understandable. It is also, at this point in the cycle, the more expensive option.",
+      "Course-correction under friction is the unglamorous version of growth. You see what needs adjusting, you feel the resistance to adjusting it, and you adjust it anyway.",
+      "There is something you've been refusing to clear away. The Last Quarter in tension is not asking politely anymore. What you're clinging to is costing you more than it's giving.",
+      "Reckoning isn't pleasant under any sky. Under tension it's sharper — the gap between where you thought you were heading and where you actually ended up is hard to look at directly.",
+      "Letting go of what no longer serves you and the reluctance to do so are both equally honest. The tension today names that reluctance without judging it. Name it yourself."
+    ],
+    "neutral": [
+      "Last Quarter is a clearing phase, and the neutral day offers no wind to help sweep things out. What releases is what you're willing to put down with your own two hands.",
+      "Course-correction is a neutral act on a neutral day — no reward, no punishment, just the honest adjustment of heading. You see the drift; you decide whether to correct it.",
+      "Something has served its purpose in this cycle and is ready to be composted back into the ground. Only you know what that something is. The day keeps your own counsel.",
+      "The call to release is not dramatic today. It's simply there, steady as the waning light — a quiet invitation to carry a little less into the next beginning.",
+      "Clearing is its own kind of act. On a day with no particular tilt, what you choose to put down and what you choose to carry forward is a portrait of your priorities."
+    ]
+  },
+  "7": {
+    "harmonious": [
+      "A waning crescent sky is the sky of the almost-finished. It asks only that you rest, and today resting comes naturally — the cycle has done what it was going to do.",
+      "Surrender isn't collapse; at the waning crescent it's a practiced art. The day runs quietly alongside you, neither asking nor demanding, as you let the last of this cycle breathe out.",
+      "Emptying makes room. Under a waning crescent in harmony, you feel — perhaps for the first time in a while — how much lighter the almost-empty vessel is.",
+      "Everything that doesn't need doing today can simply not be done. The permission is embedded in the crescent's diminishing light, and the day's ease makes it easier to accept.",
+      "Before the new moon arrives, there is this: a gentle dark, a held breath, a threshold you haven't crossed yet. The ease of today is the ease of being between things."
+    ],
+    "tension": [
+      "Retreat and the resistance to retreat meet at the waning crescent. The cycle is ending whether you release it or not, and the tension today makes the ending feel less clean than you'd like.",
+      "Closure is complicated when closure arrives under friction. Something keeps pulling at the fraying edge of this cycle, and letting it unravel fully takes more courage than you expected.",
+      "Rest is what's called for; restlessness is what you feel. The waning crescent in tension is the tug-of-war between the body that needs surrender and the mind that won't stop filing things.",
+      "A waning crescent carries the weight of what wasn't finished, and the tension in the day presses that weight into your awareness. You don't have to solve it. You only have to set it down.",
+      "Letting the cycle close while something still feels unresolved is one of the harder practices. The friction won't clarify it; the passage of time might. Rest is the first step toward that passage."
+    ],
+    "neutral": [
+      "The waning crescent is nearly gone, and the day makes no demands. What remains unfinished from this cycle has been with you long enough — you can let it be what it is.",
+      "Emptiness before a new cycle isn't lack; it's preparation. The neutral day at the waning crescent neither hurries you toward the next beginning nor holds you in this ending.",
+      "Rest has its own intelligence. Under a waning crescent with no current to carry you, the quietness you find is not nothing — it is the last work of a full cycle.",
+      "The breath before the new breath. Whatever this cycle held — the attempts, the completions, the things that got away — it is becoming memory now, on its own schedule.",
+      "On the edge of the new cycle, the neutral sky holds no verdict on what came before. The waning crescent simply closes, and you are already, in some small way, beginning."
+    ]
+  }
+};
+LANG.en.suggestionsByProfile = {
+  "work": {
+    "bright": [
+      "Move one real thing forward and trust the timing. Pick the task you already understand and let plain competence do the talking.",
+      "Send the email you've been drafting in your head. The moment to ask or pitch or name it is now — use it.",
+      "Block a full hour for the project that deserves your best thinking, not just the urgent noise at the edges.",
+      "Finish the thing you started last week. Closure on even a small task clears the deck for bigger ones.",
+      "Raise your hand in the room today — speak up in the meeting, take credit for the work, let yourself be seen."
+    ],
+    "mixed": [
+      "Put words to the thing you've been circling — send the message or name the decision. Then guard one corner of the day from work entirely; not everything that's loud is urgent.",
+      "Choose one task worth doing well and do it properly. The rest can wait; spread too thin, you finish nothing.",
+      "Answer the messages that actually matter, then close the tab. Not every ping deserves your attention today.",
+      "Move something small but real forward, and be honest about what can stay on tomorrow's list without guilt.",
+      "Do the one work thing that will still matter on Friday. Leave the busywork for a quieter day."
+    ],
+    "cautious": [
+      "Tackle the smallest item on the list — finishing anything is better than staring at everything today.",
+      "Buy yourself some room: tidy your desk, close stale tabs, archive the inbox threads that no longer need you.",
+      "Protect your focus by saying no to one thing that doesn't actually need to happen today.",
+      "Write down what's worrying you about a project — just getting it out of your head is forward motion.",
+      "Do the quiet, unsexy maintenance task you've been putting off. It costs less energy than you think."
+    ]
+  },
+  "love": {
+    "bright": [
+      "Reach out to someone you've been meaning to contact. A short, genuine message is enough — don't wait for the perfect moment.",
+      "Make plans. Text the person, suggest the time, pick the place. You already know you want to.",
+      "Say the appreciative thing you've been thinking but keeping to yourself. It lands better spoken than assumed.",
+      "Ask how someone is — and actually wait for the real answer. Full attention is the rarest gift you can give.",
+      "Do one small thing for a person you love, just because. No occasion needed."
+    ],
+    "mixed": [
+      "Give your attention to one relationship today — not several. Depth over coverage when energy is limited.",
+      "Check in on the person who's been quiet lately. A simple message costs little and means more than you'd expect.",
+      "Share something honest with someone close — not a complaint, just something real about where you are.",
+      "Make time for connection, but also honour what you need. You can show up for others without emptying yourself.",
+      "Offer help to someone today, but choose who carefully — one genuine act of care beats scattered gestures."
+    ],
+    "cautious": [
+      "Let a low-stakes conversation be just pleasant — not every interaction needs to be deep or productive.",
+      "Send a small, warm note to someone you care about. You don't need to explain it; just say you were thinking of them.",
+      "Give yourself permission to be quiet today. Presence doesn't always require words.",
+      "Check in briefly with one person — a quick message counts. You don't have to be effusive to be warm.",
+      "Be patient with yourself in any friction that comes up. Gentleness toward yourself tends to soften the room too."
+    ]
+  },
+  "health": {
+    "bright": [
+      "Take a real lunch break away from your screen. Eat something, sit somewhere, let the hour do its job.",
+      "Move your body with some real intention today — not a punishing workout, just enough to feel alive in it.",
+      "Get outside for twenty minutes, even briefly. Light and air do work that nothing on a screen can replicate.",
+      "Sleep an extra thirty minutes tonight by starting the wind-down earlier than usual. Treat it like a meeting.",
+      "Drink water before coffee. Make it the first act of the morning and notice how differently the day starts."
+    ],
+    "mixed": [
+      "Pick one nourishing thing and do it well: a walk, a real meal, eight hours. Don't scatter your effort.",
+      "Notice where tension is sitting in your body and stretch just that spot. Targeted relief beats nothing.",
+      "Eat a proper meal at a proper time today — even one anchored moment of real nourishment steadies everything else.",
+      "If rest is calling, answer it. One shorter, grounded day protects the longer run.",
+      "Step outside at some point today, even for five minutes. The reset is faster than you remember."
+    ],
+    "cautious": [
+      "Lower the bar and rest without apology. One early night or one slow morning is not wasted time.",
+      "Tidy one corner of your space — physical order has a habit of settling the mind when the mind won't settle itself.",
+      "Eat something warm and simple. Nourishment doesn't have to be complicated to do its job.",
+      "Do the gentlest form of movement you can stand: a slow walk, a stretch, five minutes of stillness. That counts.",
+      "Put the phone somewhere inconvenient tonight. Distance is the cheapest form of rest available to you."
+    ]
+  },
+  "finance": {
+    "bright": [
+      "Tackle one practical task you've been putting off — file the form, make the call, sort the folder. It's a good day for it.",
+      "Review one bill or subscription you haven't looked at in months. Awareness is already an act of care.",
+      "Tidy the material corner that's been nagging you — clear the bag, the junk drawer, the stack on the counter.",
+      "Do the errand that costs you mental energy every time you skip it. Today you have enough fuel to finish it cleanly.",
+      "Set aside time to look at your accounts with honest eyes. Not to fix everything — just to see clearly."
+    ],
+    "mixed": [
+      "Handle one concrete, overdue practical task — not everything, just the one that keeps surfacing. Then stop.",
+      "Sort the receipts, clear the inbox folder, or close the loop on a pending errand. Tidying is its own form of forward motion.",
+      "Make one small practical decision you've been avoiding. You know enough to decide; extra thought isn't helping.",
+      "Spend a few minutes with your to-do list — reschedule what needs it, cross off what's done. Clarity is worth the ten minutes.",
+      "Do the mundane practical thing that frees up mental space afterward. It always costs less than the dread suggests."
+    ],
+    "cautious": [
+      "Skip the impulse purchase today. Give it one more day; if you still want it tomorrow, you'll know it's real.",
+      "Tidy one small area — a drawer, a counter, a single folder. Small order is still order.",
+      "Write down three practical things you're grateful to have. It's a reset that costs nothing and shifts a lot.",
+      "Defer any big material decision until energy is steadier. Holding still is a legitimate move.",
+      "Organise one practical thing — a document, a bag, a shelf. The act of arranging what you have is its own quiet resource."
+    ]
+  }
+};
