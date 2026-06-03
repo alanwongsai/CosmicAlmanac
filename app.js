@@ -654,6 +654,22 @@ function scoreDirection(score){
   return 'rough';
 }
 
+// Each "category × direction" now holds multiple [rhythm, watch, move] templates.
+// One is chosen deterministically per day from the daily seed (see pickInsightVariant),
+// so the detail copy stays stable within a day but varies across days and birth profiles
+// without touching the render-time RNG stream (no change to existing oracle/message picks).
+// Large distinct constants so each category gets a well-separated sub-seed
+// (xorshift first outputs correlate when seeds differ only by a small amount).
+const INSIGHT_KEY_OFFSET={work:0x9E3779B1,love:0x85EBCA77,health:0xC2B2AE3D,finance:0x27D4EB2F};
+function pickInsightVariant(pool,key){
+  if(!pool||!pool.length)return['','',''];
+  if(pool.length===1)return pool[0];
+  const seed=(readingState&&readingState.seed)||0;
+  const r=mkRng((seed^(INSIGHT_KEY_OFFSET[key]||0x165667B1))>>>0);
+  r(); // warm up one step to decorrelate from the sub-seed
+  const idx=Math.floor(r()*pool.length)%pool.length;
+  return pool[idx];
+}
 function buildCategoryInsight(key){
   const L=LANG[lang];
   const score=readingState.ratings[key];
@@ -662,66 +678,226 @@ function buildCategoryInsight(key){
   const text={
     en:{
       work:{
-        rough:["Keep the professional lane narrow. This is a maintenance day, not a day for proving range.","Watch for unclear requests, avoidable urgency, or the temptation to volunteer before the brief is real.","Choose one task that would make tomorrow easier and complete only that."],
-        low:["Work can move, but it needs guardrails. Progress favors simple priorities and clean handoffs.","Watch for small delays, vague messages, or energy leaking into tasks that do not matter.","Write the next three steps before you start, then do the first one."],
-        steady:["The work current is stable. Ordinary effort is enough if you keep it consistent.","Watch for boredom disguising itself as restlessness; the day rewards follow-through more than novelty.","Finish a practical task you already understand instead of opening a new thread."],
-        high:["The work signal is clear. Use the momentum while it is available, especially for decisions or visible output.","Watch for overloading the day because things finally feel possible.","Move one meaningful project from intention into an observable next step."],
-        peak:["The career channel is unusually open. Visibility, timing, and confidence are all easier to access.","Watch for overconfidence or scattering strong energy across too many targets.","Ask for the thing, send the proposal, or put your best work where it can be seen."]
+        rough:[
+          ["Keep the professional lane narrow. This is a maintenance day, not a day for proving range.","Watch for unclear requests, avoidable urgency, or the temptation to volunteer before the brief is real.","Choose one task that would make tomorrow easier and complete only that."],
+          ["Ambition is running ahead of traction today. Treat it as a holding pattern and protect what already works.","Watch for forcing a decision that wants more information, or mistaking motion for progress.","Close one small loop completely instead of opening three you cannot finish."],
+          ["The work signal is thin. Lower the bar to 'kept it steady' and let that count as a win.","Watch for taking on someone else's urgency as if it were your own.","Tidy one corner of your workspace or inbox and let that be enough."]
+        ],
+        low:[
+          ["Work can move, but it needs guardrails. Progress favors simple priorities and clean handoffs.","Watch for small delays, vague messages, or energy leaking into tasks that do not matter.","Write the next three steps before you start, then do the first one."],
+          ["Momentum is light but real. Pick the path with the least friction and let it carry you.","Watch for over-planning to avoid starting, or letting small interruptions reset your focus.","Do the easiest meaningful task first to prime the rest of the day."],
+          ["You can make ground today, just not on every front. Narrow the day to one priority.","Watch for energy draining into messages and tabs that move nothing forward.","Protect one 25-minute block for the thing that actually matters."]
+        ],
+        steady:[
+          ["The work current is stable. Ordinary effort is enough if you keep it consistent.","Watch for boredom disguising itself as restlessness; the day rewards follow-through more than novelty.","Finish a practical task you already understand instead of opening a new thread."],
+          ["Conditions are workmanlike — neither lift nor drag. Reliability is the advantage today.","Watch for waiting on inspiration that is not coming; routine will outperform mood.","Pick up an unfinished thread and carry it one clear step forward."],
+          ["The middle gear suits today. A consistent pace beats short bursts.","Watch for treating a calm day as an empty one and filling it with busywork.","Knock out a task you have been postponing precisely because it is dull."]
+        ],
+        high:[
+          ["The work signal is clear. Use the momentum while it is available, especially for decisions or visible output.","Watch for overloading the day because things finally feel possible.","Move one meaningful project from intention into an observable next step."],
+          ["Traction is on your side. Decisions land cleaner and output carries further than usual.","Watch for saying yes to more than the momentum can actually sustain.","Make the call or ship the thing while the path is still open."],
+          ["The work channel rewards initiative today. What you start tends to stick.","Watch for polishing what is already good instead of advancing what is stuck.","Put your strongest hour toward the project that matters most."]
+        ],
+        peak:[
+          ["The career channel is unusually open. Visibility, timing, and confidence are all easier to access.","Watch for overconfidence or scattering strong energy across too many targets.","Ask for the thing, send the proposal, or put your best work where it can be seen."],
+          ["Rare alignment in the work field — timing, clarity, and nerve are all available at once.","Watch for spending a peak day on small wins you could get any time.","Aim the energy at the boldest thing on your list, not the easiest."],
+          ["The professional current is wide open. People are more likely to say yes today.","Watch for scattering a strong signal across too many directions.","Make one high-stakes ask you would normally talk yourself out of."]
+        ]
       },
       love:{
-        rough:["Connection needs extra softness today. Keep the emotional weather simple and avoid forcing clarity too early.","Watch for reading tone too sharply, withdrawing too fast, or expecting people to guess what you mean.","Send one kind, low-pressure signal to someone who matters."],
-        low:["Social energy is present but muted. Smaller gestures will land better than big emotional scenes.","Watch for mixed signals, delayed replies, or taking normal distance personally.","Choose one relationship and make the next exchange easier, not heavier."],
-        steady:["The relationship field is even. It supports ordinary warmth, honest attention, and calm presence.","Watch for overlooking the good because it is not dramatic.","Give someone your full attention for five uninterrupted minutes."],
-        high:["Warmth is easier to exchange today. The right words can open more than expected.","Watch for promising more emotional availability than you actually have.","Say one true thing clearly and warmly."],
-        peak:["The heart channel is bright. Affection, magnetism, and meaningful timing are all amplified.","Watch for intensity moving faster than consent, capacity, or context.","Make the generous move you will still respect tomorrow."]
+        rough:[
+          ["Connection needs extra softness today. Keep the emotional weather simple and avoid forcing clarity too early.","Watch for reading tone too sharply, withdrawing too fast, or expecting people to guess what you mean.","Send one kind, low-pressure signal to someone who matters."],
+          ["The relational field is tender. Lower the stakes and let connection stay simple.","Watch for testing people instead of telling them what you need.","Offer one small, clear kindness with no agenda attached."],
+          ["Closeness asks for patience today, not performance. Do not force a resolution.","Watch for reading silence as rejection when it is probably just distance.","Step back from the conversation that keeps looping and let it rest."]
+        ],
+        low:[
+          ["Social energy is present but muted. Smaller gestures will land better than big emotional scenes.","Watch for mixed signals, delayed replies, or taking normal distance personally.","Choose one relationship and make the next exchange easier, not heavier."],
+          ["Warmth is available in small denominations today. Spend it that way.","Watch for keeping score, or expecting reciprocity on your own timeline.","Reach out once without needing a particular reply."],
+          ["Social energy is quiet but not closed. Gentle beats grand.","Watch for overthinking a message before you have even sent it.","Check in on someone simply, then let the exchange breathe."]
+        ],
+        steady:[
+          ["The relationship field is even. It supports ordinary warmth, honest attention, and calm presence.","Watch for overlooking the good because it is not dramatic.","Give someone your full attention for five uninterrupted minutes."],
+          ["The heart field is calm and dependable. Presence matters more than gesture.","Watch for autopilot in the relationships you trust most.","Ask one real question and actually listen to the whole answer."],
+          ["Connection sits in an easy middle today. Ordinary closeness is the gift.","Watch for skipping appreciation just because nothing is wrong.","Tell someone specifically what you value about them."]
+        ],
+        high:[
+          ["Warmth is easier to exchange today. The right words can open more than expected.","Watch for promising more emotional availability than you actually have.","Say one true thing clearly and warmly."],
+          ["Affection moves easily today. Honesty lands softer than you would expect.","Watch for promising warmth you will be too tired to deliver later.","Say the kind thing out loud instead of assuming it is understood."],
+          ["The relational current is generous. People meet you halfway more readily.","Watch for mistaking momentum for a green light on everything.","Make the warm first move you keep waiting for someone else to make."]
+        ],
+        peak:[
+          ["The heart channel is bright. Affection, magnetism, and meaningful timing are all amplified.","Watch for intensity moving faster than consent, capacity, or context.","Make the generous move you will still respect tomorrow."],
+          ["The heart channel is wide and bright. Magnetism and timing are both on your side.","Watch for intensity outrunning trust or context.","Be generously honest with someone who has earned it."],
+          ["Rare openness in the love field today — closeness is unusually easy to reach.","Watch for letting a high tide sweep past your own boundaries.","Take the affectionate risk you will be glad you took tomorrow."]
+        ]
       },
       health:{
-        rough:["The body lane asks for conservation. Treat energy as a limited resource and protect your baseline.","Watch for pushing through fatigue, skipping meals, or confusing tension with motivation.","Do one restorative thing before asking your body for more."],
-        low:["Physical rhythm is below ideal but workable. Gentle consistency matters more than intensity.","Watch for shallow breathing, screen fatigue, or ignoring small signals until they get louder.","Hydrate, stretch, and lower the day's physical demand by one notch."],
-        steady:["Your body is in a usable middle range. Routine care will do more than dramatic correction.","Watch for neglecting basics because nothing feels urgent.","Anchor the day with one proper meal, one walk, or one earlier bedtime choice."],
-        high:["Vitality is available. Movement and care can compound well if you keep them clean.","Watch for spending all the energy just because it is there.","Use the lift for a walk, workout, reset, or practical body maintenance."],
-        peak:["The physical channel is strong. This is a good day to feel what your body can do.","Watch for overreaching because confidence is high.","Choose one physical action that builds future capacity, not just today's burn."]
+        rough:[
+          ["The body lane asks for conservation. Treat energy as a limited resource and protect your baseline.","Watch for pushing through fatigue, skipping meals, or confusing tension with motivation.","Do one restorative thing before asking your body for more."],
+          ["The body is running on reserves. Treat rest as the productive choice today.","Watch for caffeine standing in for sleep, or tension masquerading as drive.","Cancel one optional demand and give that hour back to your body."],
+          ["Vitality is low and asking to be heard. Subtract before you add.","Watch for pushing past the first clear signal to stop.","Do the smallest restorative thing — water, air, horizontal — right now."]
+        ],
+        low:[
+          ["Physical rhythm is below ideal but workable. Gentle consistency matters more than intensity.","Watch for shallow breathing, screen fatigue, or ignoring small signals until they get louder.","Hydrate, stretch, and lower the day's physical demand by one notch."],
+          ["Your system wants maintenance, not a challenge. Keep the demands modest.","Watch for skipping meals or sleep to buy time you will pay back with interest.","Trade one strenuous plan for a gentler version of it."],
+          ["Energy is workable if you do not spend it all at once. Pace beats push.","Watch for ignoring a small ache until it gets loud.","Build one quiet recovery window into the day on purpose."]
+        ],
+        steady:[
+          ["Your body is in a usable middle range. Routine care will do more than dramatic correction.","Watch for neglecting basics because nothing feels urgent.","Anchor the day with one proper meal, one walk, or one earlier bedtime choice."],
+          ["The body is in a serviceable rhythm. Basics, done consistently, are the whole strategy.","Watch for letting 'fine' quietly drift into neglected.","Lock in one anchor habit — a walk, a meal, a bedtime — and keep it."],
+          ["Physical baseline is steady today. Maintenance compounds quietly.","Watch for skipping the small care because nothing feels urgent.","Move your body once in a way that feels good, not punishing."]
+        ],
+        high:[
+          ["Vitality is available. Movement and care can compound well if you keep them clean.","Watch for spending all the energy just because it is there.","Use the lift for a walk, workout, reset, or practical body maintenance."],
+          ["Energy is genuinely available today. Use it cleanly and it pays forward.","Watch for burning the whole reserve just because it is there.","Channel the lift into one workout or task that builds capacity."],
+          ["The body feels capable. A good day to ask a little more of it.","Watch for mistaking a strong day for an indestructible one.","Do the active thing you have been meaning to start."]
+        ],
+        peak:[
+          ["The physical channel is strong. This is a good day to feel what your body can do.","Watch for overreaching because confidence is high.","Choose one physical action that builds future capacity, not just today's burn."],
+          ["Physical vitality is at a high mark — strength, stamina, and recovery all favor you.","Watch for overreaching on confidence and paying for it tomorrow.","Pick a challenge that leaves you stronger, not just emptier."],
+          ["The body channel is bright today. Capacity is unusually accessible.","Watch for treating one strong day as license to skip recovery.","Invest the energy in something that compounds, not a one-off burn."]
+        ]
       },
       finance:{
-        rough:["The material lane wants caution. Clarity matters more than speed, and restraint has value.","Watch for impulse purchases, vague deals, or trying to fix a feeling with spending.","Pause one financial decision until you can look at it calmly."],
-        low:["Money energy is subdued. Small practical choices are more useful than dramatic moves.","Watch for tiny leaks, subscriptions, convenience spending, or optimism without numbers.","Review one expense and decide whether it still belongs."],
-        steady:["The financial field is balanced. Skill, attention, and ordinary discipline matter more than luck.","Watch for ignoring simple maintenance because nothing feels urgent.","Check one account, bill, or plan and leave it cleaner than you found it."],
-        high:["Material timing is favorable for thoughtful action. Useful opportunities may be quiet rather than flashy.","Watch for confusing a lucky opening with permission to skip judgment.","Take one calculated step after checking the numbers."],
-        peak:["The luck channel is bright, especially when paired with precision. This favors bold but clean action.","Watch for turning confidence into recklessness.","Use the opening on a move you already understand, not a gamble you only hope will work."]
+        rough:[
+          ["The material lane wants caution. Clarity matters more than speed, and restraint has value.","Watch for impulse purchases, vague deals, or trying to fix a feeling with spending.","Pause one financial decision until you can look at it calmly."],
+          ["The money field is choppy. Defense beats offense today; protect the baseline.","Watch for emotional spending, or a deal that needs you to decide right now.","Sleep on any purchase above your usual threshold."],
+          ["Material timing is poor for bold moves. Stillness is a position too.","Watch for fixing a mood with a checkout button.","Move one tempting decision to a calmer day and leave it there."]
+        ],
+        low:[
+          ["Money energy is subdued. Small practical choices are more useful than dramatic moves.","Watch for tiny leaks, subscriptions, convenience spending, or optimism without numbers.","Review one expense and decide whether it still belongs."],
+          ["Resources are tightish but manageable. Precision matters more than ambition.","Watch for small recurring leaks you have stopped noticing.","Cancel or pause one thing you no longer use."],
+          ["The money lane is slow today. Tend it rather than push it.","Watch for optimism that skips the actual numbers.","Reconcile one balance so you are deciding from facts."]
+        ],
+        steady:[
+          ["The financial field is balanced. Skill, attention, and ordinary discipline matter more than luck.","Watch for ignoring simple maintenance because nothing feels urgent.","Check one account, bill, or plan and leave it cleaner than you found it."],
+          ["Finances sit in a stable groove. Discipline, not luck, is doing the work.","Watch for deferring the boring admin that keeps things clean.","Handle one pending money task and close it for good."],
+          ["The material field is level today. Ordinary diligence is enough.","Watch for assuming steady means it can be ignored.","Review one upcoming expense before it arrives."]
+        ],
+        high:[
+          ["Material timing is favorable for thoughtful action. Useful opportunities may be quiet rather than flashy.","Watch for confusing a lucky opening with permission to skip judgment.","Take one calculated step after checking the numbers."],
+          ["Material timing favors a measured move. Opportunity rewards homework today.","Watch for confusing a green light with a guarantee.","Take the calculated step you have already researched."],
+          ["The money channel is cooperative. Smart effort tends to convert.","Watch for chasing a flashier option over the sound one.","Advance one plan that you understand end to end."]
+        ],
+        peak:[
+          ["The luck channel is bright, especially when paired with precision. This favors bold but clean action.","Watch for turning confidence into recklessness.","Use the opening on a move you already understand, not a gamble you only hope will work."],
+          ["The luck field is bright, especially paired with precision. Bold-but-clean wins today.","Watch for letting confidence slide into a gamble.","Act on the opportunity you actually understand, fully."],
+          ["Rare favor in the material channel today — timing and judgment align.","Watch for overextending because the door is open.","Make the decisive move on something you have already vetted."]
+        ]
       }
     },
     zh:{
       work:{
-        rough:["职场这条线今天适合收窄范围。它更像维护日，不是证明能力边界的日子。","留意模糊需求、临时催促，或者在事情还没说清前就主动揽下来的冲动。","选一件能让明天更轻松的任务，只把它做好。"],
-        low:["工作可以推进，但需要护栏。简单优先级和清楚交接会比硬冲更有效。","留意小延误、含糊消息，或把精力漏到不重要的任务里。","开始前先写下接下来的三步，然后只做第一步。"],
-        steady:["工作流速稳定。普通但持续的努力已经够用。","留意把无聊误认成需要开新坑；今天更奖励完成，而不是新鲜感。","完成一件你已经理解的实际任务，不要再打开新线。"],
-        high:["职场信号清楚。适合用这股顺势处理决定、输出或可见成果。","留意因为终于顺了，就把一天塞得太满。","把一个重要项目从想法推进到一个看得见的下一步。"],
-        peak:["事业通道今天很开。可见度、时机和信心都更容易被调动。","留意过度自信，或把强能量分散到太多目标上。","提出那个请求，发出那份方案，或把最好的成果放到能被看见的位置。"]
+        rough:[
+          ["职场这条线今天适合收窄范围。它更像维护日，不是证明能力边界的日子。","留意模糊需求、临时催促，或者在事情还没说清前就主动揽下来的冲动。","选一件能让明天更轻松的任务，只把它做好。"],
+          ["今天野心跑在执行力前面。把它当成盘整期，先守住已经能跑通的部分。","留意逼自己做一个其实还缺信息的决定，或把忙碌当成进展。","彻底收掉一个小环节，而不是同时打开三个收不了的。"],
+          ["工作信号很薄。把标准降到「保持住」，这就算赢。","留意把别人的紧急当成自己的紧急来扛。","整理工作区或收件箱的一个角落，今天到这里就够。"]
+        ],
+        low:[
+          ["工作可以推进，但需要护栏。简单优先级和清楚交接会比硬冲更有效。","留意小延误、含糊消息，或把精力漏到不重要的任务里。","开始前先写下接下来的三步，然后只做第一步。"],
+          ["势头不强但真实存在。挑阻力最小的那条路，让它带你走。","留意用过度规划逃避开始，或让小打扰一次次重置专注。","先做最容易的那件有意义的事，给一天热身。"],
+          ["可以推进，但不是全线推进。把今天收窄到一个优先级。","留意精力漏进那些推不动任何事的消息和标签页。","守住一个 25 分钟，只给真正重要的那件事。"]
+        ],
+        steady:[
+          ["工作流速稳定。普通但持续的努力已经够用。","留意把无聊误认成需要开新坑；今天更奖励完成，而不是新鲜感。","完成一件你已经理解的实际任务，不要再打开新线。"],
+          ["条件中规中矩——没有顺风也没有逆风。今天的优势是稳定可靠。","留意在等一个不会来的灵感；按部就班会赢过看心情。","拿起一条没收尾的线，把它清楚地往前推一步。"],
+          ["今天适合中间挡。匀速胜过爆发。","留意把平稳的一天当成空的一天，然后塞满杂活。","专门去做一件你一直拖、正因为它无聊的事。"]
+        ],
+        high:[
+          ["职场信号清楚。适合用这股顺势处理决定、输出或可见成果。","留意因为终于顺了，就把一天塞得太满。","把一个重要项目从想法推进到一个看得见的下一步。"],
+          ["执行力站在你这边。决定落得更干净，产出也比平时走得更远。","留意答应了超过这股顺势真正撑得住的量。","趁路还开着，把那个电话打了，或把东西发出去。"],
+          ["今天职场奖励主动。你起的头更容易立住。","留意去打磨本就够好的，而不是推进卡住的。","把状态最好的一个小时，投给最重要的项目。"]
+        ],
+        peak:[
+          ["事业通道今天很开。可见度、时机和信心都更容易被调动。","留意过度自信，或把强能量分散到太多目标上。","提出那个请求，发出那份方案，或把最好的成果放到能被看见的位置。"],
+          ["职场难得的对齐——时机、清晰和胆量同时在线。","留意把巅峰日花在任何时候都能拿的小胜上。","把能量瞄准清单上最大胆的那件，而不是最容易的。"],
+          ["事业通道大开。今天别人更可能说「好」。","留意把强信号分散到太多方向。","提出一个你平时会劝退自己的高风险请求。"]
+        ]
       },
       love:{
-        rough:["关系线今天需要额外柔软。保持情绪天气简单，不要太早逼迫清晰答案。","留意过度解读语气、太快退回自己，或期待别人自动猜中你的意思。","给一个重要的人发出一个善意、低压力的信号。"],
-        low:["社交能量在，但偏弱。小动作比大型情绪场面更容易落地。","留意混合信号、回复变慢，或把正常距离理解成针对你。","选一段关系，让下一次交流更轻，而不是更重。"],
-        steady:["关系场域平稳。它支持普通的温暖、诚实的注意力和安静的在场。","留意因为它不戏剧化，就忽略其中好的部分。","给某个人五分钟完整注意力，不分心。"],
-        high:["今天温度更容易交换。合适的话会比你预想中打开更多东西。","留意承诺超过你真实能给出的情绪余量。","清楚、温和地说一句真实的话。"],
-        peak:["心的通道很亮。好感、吸引力和有意义的时机都被放大。","留意强度走得比同意、容量和现实语境更快。","做一个慷慨但明天依然会尊重自己的动作。"]
+        rough:[
+          ["关系线今天需要额外柔软。保持情绪天气简单，不要太早逼迫清晰答案。","留意过度解读语气、太快退回自己，或期待别人自动猜中你的意思。","给一个重要的人发出一个善意、低压力的信号。"],
+          ["关系场域今天很嫩。降低赌注，让连接保持简单。","留意用试探代替直接说出你的需要。","送出一个不带目的、清楚的小善意。"],
+          ["亲近今天要的是耐心，不是表现。别逼出一个结论。","留意把沉默读成拒绝，其实那多半只是距离。","从那段一直绕圈的对话里退出来，让它先歇着。"]
+        ],
+        low:[
+          ["社交能量在，但偏弱。小动作比大型情绪场面更容易落地。","留意混合信号、回复变慢，或把正常距离理解成针对你。","选一段关系，让下一次交流更轻，而不是更重。"],
+          ["温度今天以小额面值供应。就这样花它。","留意计较得失，或要求对方按你的时间表回应。","主动联系一次，不必非要某种回复。"],
+          ["社交能量安静，但没关上。温柔胜过盛大。","留意一条消息还没发就已经想太多。","简单地问候一个人，然后让交流自然呼吸。"]
+        ],
+        steady:[
+          ["关系场域平稳。它支持普通的温暖、诚实的注意力和安静的在场。","留意因为它不戏剧化，就忽略其中好的部分。","给某个人五分钟完整注意力，不分心。"],
+          ["心的场域平稳可靠。在场比姿态更重要。","留意在最信任的关系里开了自动驾驶。","问一个真实的问题，并且真的听完整个回答。"],
+          ["连接今天落在轻松的中间。普通的亲近就是礼物。","留意因为没出问题，就跳过了表达欣赏。","具体地告诉某人，你看重他哪一点。"]
+        ],
+        high:[
+          ["今天温度更容易交换。合适的话会比你预想中打开更多东西。","留意承诺超过你真实能给出的情绪余量。","清楚、温和地说一句真实的话。"],
+          ["今天好感流动顺畅。坦诚落地比你想的更柔软。","留意承诺了之后会累到给不出的温度。","把那句善意说出口，别假设对方已经懂。"],
+          ["关系的流向很慷慨。别人更愿意走过来一半。","留意把顺势误当成所有事都开了绿灯。","主动做出那个你总在等别人先做的温暖动作。"]
+        ],
+        peak:[
+          ["心的通道很亮。好感、吸引力和有意义的时机都被放大。","留意强度走得比同意、容量和现实语境更快。","做一个慷慨但明天依然会尊重自己的动作。"],
+          ["心的通道又宽又亮。吸引力和时机都站在你这边。","留意强度跑过了信任或语境。","对一个值得的人，慷慨地坦诚一次。"],
+          ["今天爱的场域难得敞开——亲近异常容易抵达。","留意让高潮把你自己的边界一起冲走。","做那个明天会庆幸自己做了的、带感情的冒险。"]
+        ]
       },
       health:{
-        rough:["身体线今天要求保存能量。把体力当成有限资源，先保护基础状态。","留意硬扛疲惫、跳过正餐，或把紧绷误认成动力。","在继续要求身体输出前，先做一件恢复性的事。"],
-        low:["身体节奏低于理想值，但还可运转。温和一致比强度更重要。","留意呼吸变浅、屏幕疲劳，或忽视小信号直到它变大。","喝水、拉伸，并把今天的身体要求下调一档。"],
-        steady:["身体处在可用的中间区间。日常照顾比戏剧性修正更有用。","留意因为没有明显警报，就忽略基础维护。","用一顿正经饭、一次散步，或一个早点睡的选择固定今天。"],
-        high:["活力可用。运动和照顾如果保持干净，会有叠加效果。","留意因为有能量，就把它全部花光。","把这股抬升用在散步、训练、重置或身体维护上。"],
-        peak:["身体通道很强。今天适合感受身体真正能做到什么。","留意因为信心高而过度推进。","选一个能建设未来体能的动作，而不只是消耗今天的能量。"]
+        rough:[
+          ["身体线今天要求保存能量。把体力当成有限资源，先保护基础状态。","留意硬扛疲惫、跳过正餐，或把紧绷误认成动力。","在继续要求身体输出前，先做一件恢复性的事。"],
+          ["身体在吃老本。今天把休息当成最有产出的选择。","留意用咖啡因顶替睡眠，或把紧绷当成动力。","取消一个可选的安排，把那一小时还给身体。"],
+          ["活力很低，正在求你听见。先做减法再做加法。","留意冲过第一个明确的停止信号。","现在就做最小的恢复动作——喝水、透气、躺平。"]
+        ],
+        low:[
+          ["身体节奏低于理想值，但还可运转。温和一致比强度更重要。","留意呼吸变浅、屏幕疲劳，或忽视小信号直到它变大。","喝水、拉伸，并把今天的身体要求下调一档。"],
+          ["系统今天要的是维护，不是挑战。把要求压低。","留意用跳过吃饭和睡觉换时间，之后要连本带利还。","把一个高强度计划换成它温和的版本。"],
+          ["能量还能用，前提是别一次花光。配速胜过硬冲。","留意忽视一个小疼痛，直到它变响。","在一天里特意安排一个安静的恢复窗口。"]
+        ],
+        steady:[
+          ["身体处在可用的中间区间。日常照顾比戏剧性修正更有用。","留意因为没有明显警报，就忽略基础维护。","用一顿正经饭、一次散步，或一个早点睡的选择固定今天。"],
+          ["身体节奏堪用。把基础做到一致，这就是全部策略。","留意让「还行」慢慢滑成「被忽略」。","锁定一个锚点习惯——散步、一顿饭、或睡点——然后守住。"],
+          ["身体基线今天稳定。维护会安静地累积。","留意因为没有紧急感，就跳过了小照顾。","用一种让你舒服而不是惩罚的方式动一次身体。"]
+        ],
+        high:[
+          ["活力可用。运动和照顾如果保持干净，会有叠加效果。","留意因为有能量，就把它全部花光。","把这股抬升用在散步、训练、重置或身体维护上。"],
+          ["今天能量是真的有。用得干净，它会往后回报你。","留意只因为有，就把整个储备烧光。","把这股抬升导进一次训练，或一件建设体能的事。"],
+          ["身体感觉有余力。适合今天对它多要求一点。","留意把状态好的一天当成无敌的一天。","去做那件你一直想开始的有氧的事。"]
+        ],
+        peak:[
+          ["身体通道很强。今天适合感受身体真正能做到什么。","留意因为信心高而过度推进。","选一个能建设未来体能的动作，而不只是消耗今天的能量。"],
+          ["身体活力到了高位——力量、耐力和恢复都向着你。","留意凭信心过度推进，明天来还账。","选一个让你更强、而不只是更空的挑战。"],
+          ["身体通道今天很亮。体能异常容易调用。","留意把一个强日当成可以跳过恢复的许可。","把能量投到能累积的事上——不是一次性的燃烧。"]
+        ]
       },
       finance:{
-        rough:["物质线今天要谨慎。清楚比速度重要，克制本身有价值。","留意冲动消费、含糊交易，或试图用花钱修复情绪。","把一个财务决定暂停到你能冷静看它的时候。"],
-        low:["金钱能量偏低。小而实际的选择比戏剧性动作更有用。","留意小漏、订阅、便利消费，或没有数字支撑的乐观。","检查一项开支，判断它是否还应该留在你的生活里。"],
-        steady:["财务场域平衡。技巧、注意力和普通纪律比运气更重要。","留意因为没有紧急感，就忽略简单维护。","检查一个账户、账单或计划，让它比刚开始时更清楚。"],
-        high:["物质时机偏顺，适合经过思考后的行动。机会可能安静，不一定醒目。","留意把幸运窗口误认成可以跳过判断。","核对数字后，迈出一个计算过的小步。"],
-        peak:["偏财通道很亮，尤其适合和精准度配合。它支持大胆但干净的动作。","留意把信心变成鲁莽。","把这个窗口用在你已经理解的行动上，而不是只靠希望的赌注上。"]
+        rough:[
+          ["物质线今天要谨慎。清楚比速度重要，克制本身有价值。","留意冲动消费、含糊交易，或试图用花钱修复情绪。","把一个财务决定暂停到你能冷静看它的时候。"],
+          ["金钱场域颠簸。今天防守胜过进攻，先保住基础盘。","留意情绪化消费，或一个逼你当场拍板的交易。","任何超过日常阈值的购买，先睡一觉再说。"],
+          ["物质时机不适合大动作。静止也是一种仓位。","留意用一个结账按钮去修复情绪。","把一个诱人的决定挪到更冷静的一天，然后留在那儿。"]
+        ],
+        low:[
+          ["金钱能量偏低。小而实际的选择比戏剧性动作更有用。","留意小漏、订阅、便利消费，或没有数字支撑的乐观。","检查一项开支，判断它是否还应该留在你的生活里。"],
+          ["资源有点紧但能管理。精准比野心更重要。","留意那些你已经不再注意的小额定期漏出。","取消或暂停一个你已经不用的东西。"],
+          ["金钱这条线今天慢。养它，别推它。","留意跳过实际数字的乐观。","对一笔余额做一次核对，让你从事实出发做决定。"]
+        ],
+        steady:[
+          ["财务场域平衡。技巧、注意力和普通纪律比运气更重要。","留意因为没有紧急感，就忽略简单维护。","检查一个账户、账单或计划，让它比刚开始时更清楚。"],
+          ["财务处在稳定的轨道里。在起作用的是纪律，不是运气。","留意一再推迟那些让一切保持干净的无聊杂务。","处理一件待办的钱务，把它彻底了结。"],
+          ["物质场域今天持平。普通的勤勉就够了。","留意把「稳定」当成「可以不管」。","在一笔即将到来的开支到账前先看一眼。"]
+        ],
+        high:[
+          ["物质时机偏顺，适合经过思考后的行动。机会可能安静，不一定醒目。","留意把幸运窗口误认成可以跳过判断。","核对数字后，迈出一个计算过的小步。"],
+          ["物质时机偏向有度的行动。今天机会奖励做过功课的人。","留意把绿灯误当成保证。","迈出那个你已经研究过的、计算过的小步。"],
+          ["金钱通道愿意配合。聪明的努力今天更容易兑现。","留意去追更花哨的选项，而放过稳妥的那个。","推进一个你从头到尾都理解的计划。"]
+        ],
+        peak:[
+          ["偏财通道很亮，尤其适合和精准度配合。它支持大胆但干净的动作。","留意把信心变成鲁莽。","把这个窗口用在你已经理解的行动上，而不是只靠希望的赌注上。"],
+          ["偏财场域很亮，尤其和精准配合时。大胆但干净会赢。","留意让信心滑进一场赌博。","对那个你真正理解的机会，完整地行动。"],
+          ["今天物质通道难得有利——时机和判断对齐。","留意因为门开着就过度伸展。","对一个你已经核实过的东西，做出决定性的一步。"]
+        ]
       }
     }
   };
-  const [rhythm,watch,move]=text[lang][key][direction];
+  const [rhythm,watch,move]=pickInsightVariant(text[lang][key][direction],key);
   return{
     rhythm,
     watch,
@@ -844,7 +1020,8 @@ function renderReading(bday,targetDate=new Date()){
   // Track what changed to allow targeted DOM updates below
   const bdayOrLangChanged = !readingState || readingState.bday!==bday || readingState.langUsed!==lang;
 
-  const rng=mkRng(dailySeed(bday,today));
+  const seed=dailySeed(bday,today);
+  const rng=mkRng(seed);
 
   // Real astrological ratings
   const calc=calcRatings(bday,today,rng);
@@ -875,6 +1052,7 @@ function renderReading(bday,targetDate=new Date()){
   readingState={
     bday,
     langUsed:lang,
+    seed,
     birthYear:bY,
     dateKey:todayStr,
     dateLabel:'',
