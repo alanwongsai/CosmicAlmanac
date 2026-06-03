@@ -274,6 +274,7 @@ function applyStaticLang(){
   if($('sug-lbl')) tx('sug-lbl',   L.sugLbl);
   if($('btn-reset'))tx('btn-reset', L.changeBtn);
   if($('btn-creator'))tx('btn-creator', L.creatorBtn);
+  if($('btn-about'))tx('btn-about', L.aboutBtn);
   if($('date-prev'))tx('date-prev', L.prevDay);
   if($('date-next'))tx('date-next', L.nextDay);
   if($('date-today'))tx('date-today', L.todayBtn);
@@ -369,6 +370,9 @@ function applyDetail(payload){
   custom.style.display='none';
   if(payload.custom && payload.custom.type==='almanac'){
     renderAlmanacCustom(payload.custom);
+    custom.style.display='block';
+  }else if(payload.custom && payload.custom.type==='privacy'){
+    renderPrivacyCustom();
     custom.style.display='block';
   }
 
@@ -959,6 +963,42 @@ function buildCreatorDetail(){
   };
 }
 
+function buildAboutDetail(){
+  const L=LANG[lang];
+  return{
+    kicker:L.aboutKicker,
+    title:L.aboutTitle,
+    subtitle:L.aboutSub,
+    facts:[],
+    paragraphs:L.aboutParas,
+    custom:{type:'privacy'}
+  };
+}
+
+const ANALYTICS_OPT_OUT_KEY='cosmic_analytics_opt_out';
+function analyticsEnabled(){return storage.get(ANALYTICS_OPT_OUT_KEY)!=='1';}
+function renderPrivacyCustom(){
+  const L=LANG[lang];
+  const custom=$('detail-custom');
+  const on=analyticsEnabled();
+  custom.innerHTML=`
+    <div class="privacy-toggle">
+      <div class="privacy-toggle-text">
+        <div class="privacy-toggle-label">${escapeHtml(L.privacyAnalyticsLabel)}</div>
+        <div class="privacy-toggle-note">${escapeHtml(on?L.privacyAnalyticsOnNote:L.privacyAnalyticsOffNote)}</div>
+      </div>
+      <button type="button" class="privacy-toggle-btn${on?'':' off'}" id="privacy-toggle-btn">
+        ${escapeHtml(on?L.privacyToggleToOff:L.privacyToggleToOn)}
+      </button>
+    </div>`;
+  $('privacy-toggle-btn').addEventListener('click',()=>{
+    if(analyticsEnabled())storage.set(ANALYTICS_OPT_OUT_KEY,'1');
+    else storage.remove(ANALYTICS_OPT_OUT_KEY);
+    // Reload so the analytics beacon actually starts/stops; the birthday persists.
+    location.reload();
+  });
+}
+
 function getDetailPayload(type,key){
   if(!readingState)return null;
   switch(type){
@@ -973,6 +1013,7 @@ function getDetailPayload(type,key){
     case 'oracle': return buildOracleDetail();
     case 'suggestion': return buildSuggestionDetail();
     case 'creator': return buildCreatorDetail();
+    case 'about': return buildAboutDetail();
     default: return null;
   }
 }
