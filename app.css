@@ -566,3 +566,83 @@
     .d0{animation-delay:0s}.d1{animation-delay:.07s}.d2{animation-delay:.14s}
     .d3{animation-delay:.21s}.d4{animation-delay:.28s}.d5{animation-delay:.36s}
     .d6{animation-delay:.44s}.d7{animation-delay:.52s}
+
+    /* ── Share button (top controls) ──────────────────────────────── */
+    .top-controls-right{display:flex;align-items:center;gap:10px}
+    .share-btn{
+      display:inline-flex;align-items:center;gap:6px;
+      background:linear-gradient(135deg,rgba(196,165,90,.22),rgba(196,165,90,.10));
+      border:1px solid rgba(196,165,90,.32);
+      backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);
+      border-radius:20px;padding:6px 14px;
+      font-size:13px;font-weight:600;color:var(--t1);
+      cursor:pointer;font-family:inherit;transition:all .2s;letter-spacing:.4px;
+      box-shadow:var(--glass-shadow-soft);
+    }
+    .share-btn .share-ico{font-size:14px;line-height:1}
+    .share-btn:hover,.share-btn:focus-visible{
+      background:linear-gradient(135deg,rgba(196,165,90,.34),rgba(196,165,90,.18));
+      box-shadow:0 0 16px rgba(196,165,90,.18);outline:none}
+    .share-btn:disabled{opacity:.7;cursor:default}
+
+    /* ── Detail-card share button ─────────────────────────────────── */
+    .detail-share{
+      position:absolute;top:16px;right:54px;width:30px;height:30px;
+      display:grid;place-items:center;border-radius:50%;
+      background:var(--glass-chip);border:1px solid var(--glass-border-soft);
+      color:var(--t2);font-size:14px;cursor:pointer;font-family:inherit;transition:all .2s;z-index:2}
+    .detail-share:hover,.detail-share:focus-visible{background:var(--glass-panel-soft);color:var(--t1);transform:scale(1.04);outline:none}
+
+    /* ── Share poster (off-screen html2canvas render target) ──────── */
+    #share-poster{position:fixed;left:-99999px;top:0;display:none}
+    .poster{
+      width:460px;box-sizing:border-box;padding:34px 30px 26px;
+      background:
+        radial-gradient(ellipse 80% 40% at 50% 0%, rgba(170,130,35,.10) 0%, transparent 60%),
+        radial-gradient(ellipse 70% 35% at 50% 100%, rgba(25,20,42,.5) 0%, transparent 60%),
+        #09080b;
+      color:rgba(255,252,248,.92);
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",system-ui,sans-serif;
+      border:1px solid rgba(196,165,90,.18);border-radius:26px}
+    .poster .p-head{text-align:center;margin-bottom:18px}
+    .poster .p-star{display:block;font-size:30px;color:#e9c98f;line-height:1;margin-bottom:6px;text-shadow:0 0 18px rgba(196,165,90,.5)}
+    .poster .p-word{font-family:"Iowan Old Style","Palatino Linotype","Baskerville","Times New Roman",serif;
+      font-size:27px;font-weight:700;letter-spacing:.02em;color:#e9c98f;text-shadow:0 0 14px rgba(196,165,90,.28)}
+    .poster .p-word-zh{font-size:12px;color:rgba(255,252,248,.5);letter-spacing:.32em;margin-top:3px}
+    .poster .p-date{text-align:center;font-size:12px;color:rgba(255,252,248,.5);letter-spacing:.04em}
+    .poster .p-title{text-align:center;font-family:"Iowan Old Style","Palatino Linotype","Baskerville",serif;
+      font-size:21px;font-weight:600;color:rgba(255,252,248,.95);margin-top:4px}
+    .poster .p-signs{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:14px 0 6px}
+    .poster .p-signs span{font-size:13px;color:rgba(255,252,248,.86);background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,252,248,.10);border-radius:14px;padding:5px 12px}
+    .poster .p-sky{text-align:center;font-size:12px;color:rgba(255,252,248,.55);margin-bottom:14px}
+    .poster .p-yiji{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+    .poster .p-yi,.poster .p-ji{background:rgba(255,255,255,.045);border:1px solid rgba(255,252,248,.09);
+      border-radius:14px;padding:10px 12px;font-size:11.5px;line-height:1.5;color:rgba(255,252,248,.78)}
+    .poster .p-yi b{display:block;color:#e9c98f;font-size:12px;margin-bottom:3px;font-weight:700}
+    .poster .p-ji b{display:block;color:rgba(214,170,150,.92);font-size:12px;margin-bottom:3px;font-weight:700}
+    .poster .p-cats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+    .poster .pc{background:rgba(255,255,255,.045);border:1px solid rgba(255,252,248,.09);border-radius:14px;padding:11px 12px}
+    .poster .pc-top{display:flex;justify-content:space-between;align-items:center;gap:6px}
+    .poster .pc-name{font-size:12.5px;font-weight:600;color:rgba(255,252,248,.9)}
+    .poster .pc-lbl{font-size:10px;color:#e9c98f;white-space:nowrap}
+    .poster .pc-msg{font-size:11px;line-height:1.5;color:rgba(255,252,248,.62);margin-top:6px}
+    .poster .dots{display:flex;gap:4px;margin:7px 0 0}
+    .poster .dot{width:6px;height:6px;border-radius:50%;background:rgba(255,252,248,.16)}
+    .poster .dot.on{background:#e9c98f;box-shadow:0 0 6px rgba(196,165,90,.5)}
+    .poster .p-block{background:rgba(255,255,255,.05);border:1px solid rgba(255,252,248,.10);
+      border-radius:16px;padding:14px 16px;margin-bottom:12px}
+    .poster .p-lbl{font-size:11px;letter-spacing:.08em;color:#e9c98f;margin-bottom:6px}
+    .poster .p-text{font-size:13px;line-height:1.62;color:rgba(255,252,248,.86)}
+    .poster .p-block .p-text{font-family:"Iowan Old Style","Palatino Linotype","Baskerville",serif}
+    .poster .p-kicker{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#e9c98f;text-align:center;margin-bottom:4px}
+    .poster .p-sub{text-align:center;font-size:12px;color:rgba(255,252,248,.5);margin-bottom:10px}
+    .poster .p-pills{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:12px}
+    .poster .p-pill{font-size:11px;color:rgba(255,252,248,.8);background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,252,248,.10);border-radius:12px;padding:4px 10px}
+    .poster .p-detail-copy .p-text+.p-text{margin-top:8px}
+    .poster .p-foot{display:flex;align-items:center;gap:14px;margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,252,248,.08)}
+    .poster .p-qr{width:62px;height:62px;flex-shrink:0;background:#09080b;border:1px solid rgba(196,165,90,.2);border-radius:10px;padding:5px}
+    .poster .p-qr svg{width:100%;height:100%;display:block}
+    .poster .p-foot-txt{font-size:11px;line-height:1.5;color:rgba(255,252,248,.5)}
+    .poster .p-foot-txt span{color:rgba(255,252,248,.28);font-size:10px}

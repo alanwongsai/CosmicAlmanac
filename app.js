@@ -250,6 +250,7 @@ function toggleTheme(){
 let lang = storage.get('cosmic_lang') || 'en';
 let readingState=null;
 let lastDetailTrigger=null;
+let currentDetailPayload=null;
 let selectedDate=localDate(new Date());
 
 function toggleLang(){
@@ -275,6 +276,9 @@ function applyStaticLang(){
   if($('btn-reset'))tx('btn-reset', L.changeBtn);
   if($('btn-creator'))tx('btn-creator', L.creatorBtn);
   if($('btn-about'))tx('btn-about', L.aboutBtn);
+  if($('btn-share'))$('btn-share').setAttribute('aria-label',L.shareBtn);
+  if($('btn-share-lbl'))tx('btn-share-lbl', L.shareBtn);
+  if($('detail-share'))$('detail-share').setAttribute('aria-label',L.shareCardBtn);
   if($('date-prev'))tx('date-prev', L.prevDay);
   if($('date-next'))tx('date-next', L.nextDay);
   if($('date-today'))tx('date-today', L.todayBtn);
@@ -286,6 +290,7 @@ function show(id){
   if(id!=='reading')closeDetail();
   ['onboarding','reading'].forEach(s=>$(s).classList.add('hidden'));
   $(id).classList.remove('hidden');
+  if($('btn-share'))$('btn-share').style.display=id==='reading'?'':'none';
 }
 
 function startReading(){
@@ -388,6 +393,7 @@ function applyDetail(payload){
 
 function openDetail(payload){
   if(!payload)return;
+  currentDetailPayload=payload;
   applyDetail(payload);
   $('detail-modal').classList.add('open');
   $('detail-modal').setAttribute('aria-hidden','false');
@@ -1113,6 +1119,7 @@ function renderReading(bday,targetDate=new Date()){
     msgs,
     oracle,
     suggest,
+    rtitle,
     phaseIdx:mi,
     dayIdx:today.getDay(),
     aspect:calc.asp,
@@ -1180,6 +1187,113 @@ function renderReading(bday,targetDate=new Date()){
 
   tx('oracle-txt', oracle);
   tx('sug-txt',    suggest);
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  SHARE  (offline html2canvas → poster PNG → native share / download)
+// ═══════════════════════════════════════════════════════════════
+const POSTER_QR=`<svg viewBox="0 0 41 41" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="QR code">
+<path fill="#09080b" d="M0 0h41v41H0z"/>
+<path stroke="#c4a55a" d="M4 4.5h7m2 0h1m2 0h2m3 0h4m2 0h1m2 0h7M4 5.5h1m5 0h1m2 0h9m2 0h1m1 0h1m3 0h1m5 0h1M4 6.5h1m1 0h3m1 0h1m1 0h2m1 0h1m1 0h1m2 0h5m2 0h1m2 0h1m1 0h3m1 0h1M4 7.5h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m3 0h3m1 0h1m1 0h1m1 0h3m1 0h1M4 8.5h1m1 0h3m1 0h1m1 0h3m1 0h2m1 0h1m1 0h2m5 0h1m1 0h1m1 0h3m1 0h1M4 9.5h1m5 0h1m1 0h1m1 0h2m1 0h4m1 0h1m1 0h1m1 0h1m3 0h1m5 0h1M4 10.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M12 11.5h1m1 0h1m1 0h1m1 0h2m5 0h3M4 12.5h1m1 0h5m2 0h3m2 0h2m1 0h1m4 0h2m2 0h5M7 13.5h1m1 0h1m1 0h1m3 0h1m4 0h1m2 0h3m1 0h1m2 0h2m1 0h2m1 0h1M4 14.5h1m1 0h1m3 0h2m2 0h1m4 0h2m1 0h1m2 0h1m2 0h3m1 0h1m1 0h2M4 15.5h2m1 0h1m1 0h1m1 0h2m5 0h2m3 0h5m1 0h1m2 0h5M4 16.5h1m5 0h1m3 0h1m1 0h1m5 0h2m1 0h1m1 0h3m1 0h3M12 17.5h1m2 0h2m1 0h3m3 0h1m1 0h3m1 0h1m2 0h1m1 0h2M4 18.5h1m1 0h1m1 0h3m1 0h2m1 0h1m2 0h1m4 0h1m2 0h1m2 0h3m1 0h3M5 19.5h1m2 0h1m7 0h3m1 0h1m1 0h4m1 0h4m1 0h3M4 20.5h1m4 0h5m7 0h1m1 0h1m2 0h1m1 0h2m1 0h2m3 0h1M4 21.5h3m2 0h1m5 0h4m1 0h4m3 0h1m2 0h2m1 0h4M5 22.5h1m2 0h1m1 0h1m2 0h1m2 0h2m1 0h1m1 0h1m2 0h1m1 0h1m4 0h2m1 0h2M5 23.5h1m2 0h1m2 0h1m2 0h1m1 0h1m3 0h3m5 0h2m1 0h6M4 24.5h5m1 0h1m2 0h1m2 0h2m2 0h1m2 0h4m1 0h2m1 0h3m1 0h2M4 25.5h2m1 0h1m1 0h1m2 0h2m5 0h1m1 0h2m2 0h1m1 0h1m2 0h1m5 0h1M4 26.5h1m2 0h8m2 0h4m1 0h1m1 0h1m1 0h1m6 0h3M4 27.5h1m2 0h1m1 0h1m1 0h2m1 0h4m1 0h1m2 0h1m2 0h2m1 0h2m1 0h1m1 0h2M4 28.5h1m4 0h5m2 0h1m2 0h1m1 0h1m4 0h1m1 0h5m2 0h2M12 29.5h1m1 0h1m1 0h2m5 0h4m1 0h1m3 0h1m1 0h1m1 0h1M4 30.5h7m3 0h4m1 0h1m2 0h1m1 0h2m1 0h2m1 0h1m1 0h1m1 0h2M4 31.5h1m5 0h1m1 0h2m1 0h4m6 0h4m3 0h5M4 32.5h1m1 0h3m1 0h1m1 0h4m2 0h2m2 0h1m2 0h1m2 0h6M4 33.5h1m1 0h3m1 0h1m1 0h1m2 0h2m1 0h3m3 0h3m1 0h2m2 0h1m1 0h1m1 0h1M4 34.5h1m1 0h3m1 0h1m1 0h1m1 0h2m5 0h1m3 0h1m2 0h2m1 0h1M4 35.5h1m5 0h1m3 0h1m5 0h1m2 0h4m2 0h2m1 0h3M4 36.5h7m1 0h7m2 0h1m1 0h1m2 0h3m1 0h2m2 0h2"/>
+</svg>`;
+
+function posterCats(){
+  const L=LANG[lang],r=readingState;
+  return CAT_KEYS.map((k,i)=>`
+    <div class="pc">
+      <div class="pc-top"><span class="pc-name">${CAT_ICONS[i]} ${L[k].name}</span><span class="pc-lbl">${L.rLbls[r.ratings[k]]}</span></div>
+      ${dots(r.ratings[k])}
+      <div class="pc-msg">${escapeHtml(r.msgs[k])}</div>
+    </div>`).join('');
+}
+function buildPosterReading(){
+  const L=LANG[lang],r=readingState;
+  const west=`${WEST_EMOJI[r.westIdx]} ${L.westNames[r.westIdx]}`;
+  const chi=`${CHI_EMOJI[r.chineseIdx]} ${lang==='zh'?L.chiNames[r.chineseIdx]+'年':L.yearOf(L.chiNames[r.chineseIdx])}`;
+  const sky=`${MOON_EMOJI[r.phaseIdx]} ${L.moonNames[r.phaseIdx]} · ${ZODIAC_EMOJI[r.moonSignIdx]} ${L.zodiacNames[r.moonSignIdx]} · ${PLANET_EMOJI[r.dayIdx]} ${r.planetDayLabel}`;
+  const adv=buildAlmanacAdvice();
+  return `
+    <div class="p-date">${escapeHtml(r.dateLabel)}</div>
+    <div class="p-title">${escapeHtml(r.rtitle||'')}</div>
+    <div class="p-signs"><span>${west}</span><span>${chi}</span></div>
+    <div class="p-sky">${sky}</div>
+    <div class="p-yiji">
+      <div class="p-yi"><b>${lang==='zh'?'宜':'Do'}</b> ${escapeHtml(adv.yi)}</div>
+      <div class="p-ji"><b>${lang==='zh'?'忌':'Avoid'}</b> ${escapeHtml(adv.ji)}</div>
+    </div>
+    <div class="p-cats">${posterCats()}</div>
+    <div class="p-block"><div class="p-lbl">${L.oracleLbl}</div><div class="p-text">${escapeHtml(r.oracle)}</div></div>
+    <div class="p-block"><div class="p-lbl">${L.sugLbl}</div><div class="p-text">${escapeHtml(r.suggest)}</div></div>`;
+}
+function buildPosterDetail(){
+  const p=currentDetailPayload; if(!p)return '';
+  const facts=(p.facts||[]).map(f=>`<span class="p-pill">${escapeHtml(f)}</span>`).join('');
+  let paras=(p.paragraphs||[]).filter(Boolean).map(t=>`<div class="p-text">${escapeHtml(t)}</div>`).join('');
+  if(!paras && p.custom && p.custom.type==='almanac'){
+    const adv=buildAlmanacAdvice();
+    paras=`<div class="p-text"><b>${lang==='zh'?'宜':'Do'}:</b> ${escapeHtml(adv.yi)}</div>`+
+          `<div class="p-text"><b>${lang==='zh'?'忌':'Avoid'}:</b> ${escapeHtml(adv.ji)}</div>`;
+  }
+  return `
+    <div class="p-kicker">${escapeHtml(p.kicker||'')}</div>
+    <div class="p-title">${escapeHtml(p.title||'')}</div>
+    ${p.subtitle?`<div class="p-sub">${escapeHtml(p.subtitle)}</div>`:''}
+    ${facts?`<div class="p-pills">${facts}</div>`:''}
+    ${paras}`;
+}
+function fillPoster(inner){
+  $('share-poster').innerHTML=`
+    <div class="poster">
+      <div class="p-head">
+        <span class="p-star">✦</span>
+        <div class="p-word">Cosmic Almanac</div>
+        <div class="p-word-zh">宇宙日历</div>
+      </div>
+      ${inner}
+      <div class="p-foot">
+        <div class="p-qr">${POSTER_QR}</div>
+        <div class="p-foot-txt">${lang==='zh'?'扫码打开你的每日占星':'Scan to open your daily oracle'}<br><span>alanwongsai.github.io/CosmicAlmanac</span></div>
+      </div>
+    </div>`;
+  return $('share-poster').firstElementChild;
+}
+async function captureShare(btn,inner,filename){
+  if(typeof html2canvas!=='function')return;
+  const L=LANG[lang];
+  const orig=btn?btn.textContent:'';
+  if(btn){btn.disabled=true;btn.textContent=L.shareBusy;}
+  const host=$('share-poster');
+  host.style.display='block';
+  const node=fillPoster(inner);
+  try{
+    if(document.fonts&&document.fonts.ready)await document.fonts.ready;
+    const canvas=await html2canvas(node,{backgroundColor:'#09080b',scale:2,useCORS:true,logging:false});
+    const blob=await new Promise(res=>canvas.toBlob(res,'image/png',0.95));
+    if(!blob)throw new Error('empty image');
+    const file=new File([blob],filename,{type:'image/png'});
+    if(navigator.canShare&&navigator.canShare({files:[file]})&&navigator.share){
+      await navigator.share({title:L.shareTitle,files:[file]});
+    }else{
+      const url=URL.createObjectURL(blob);
+      const a=document.createElement('a');a.href=url;a.download=filename;
+      document.body.appendChild(a);a.click();a.remove();
+      setTimeout(()=>URL.revokeObjectURL(url),1000);
+    }
+    if(btn)btn.textContent=L.shareSaved;
+  }catch(e){
+    if(btn && !(e&&e.name==='AbortError'))btn.textContent=L.shareFail;
+  }finally{
+    host.style.display='none';host.innerHTML='';
+    if(btn)setTimeout(()=>{btn.textContent=orig;btn.disabled=false;},1500);
+  }
+}
+function shareReading(){
+  if(!readingState)return;
+  captureShare($('btn-share'),buildPosterReading(),`cosmic-daily-${readingState.dateKey}.png`);
+}
+function shareDetail(){
+  if(!currentDetailPayload)return;
+  captureShare($('detail-share'),buildPosterDetail(),'cosmic-card.png');
 }
 
 // ═══════════════════════════════════════════════════════════════

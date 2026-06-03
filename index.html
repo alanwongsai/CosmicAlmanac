@@ -47,8 +47,11 @@
 </div>
 
 <div class="top-controls" aria-label="App controls">
-  <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" aria-label="Toggle day/night mode">☀️</button>
-  <button class="lang-btn" id="lang-btn" onclick="toggleLang()">中文</button>
+  <button class="share-btn" id="btn-share" type="button" onclick="shareReading()"><span class="share-ico" aria-hidden="true">⇪</span><span id="btn-share-lbl"></span></button>
+  <div class="top-controls-right">
+    <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" aria-label="Toggle day/night mode">☀️</button>
+    <button class="lang-btn" id="lang-btn" onclick="toggleLang()">中文</button>
+  </div>
 </div>
 
 <!-- ═══ ONBOARDING ═══ -->
@@ -111,6 +114,7 @@
 
 <div class="detail-modal" id="detail-modal" aria-hidden="true">
   <div class="glass detail-sheet" role="dialog" aria-modal="true" aria-labelledby="detail-title">
+    <button class="detail-share" id="detail-share" type="button" onclick="shareDetail()" aria-label="Share this card">⇪</button>
     <button class="detail-close" id="detail-close" type="button" onclick="closeDetail()">✕</button>
     <div class="detail-kicker" id="detail-kicker"></div>
     <div class="detail-title" id="detail-title"></div>
@@ -121,6 +125,10 @@
   </div>
 </div>
 
+<!-- Off-screen render target for share posters (captured by html2canvas) -->
+<div id="share-poster" aria-hidden="true"></div>
+
+<script src="vendor/html2canvas.min.js"></script>
 <script src="content.en.js"></script>
 <script src="content.zh.js"></script>
 <script src="app.js"></script>
