@@ -1,6 +1,6 @@
 // Bump CACHE version whenever app shell files change.
 // Example: 'cosmic-v2', 'cosmic-v3', etc.
-const CACHE = 'cosmic-v5';
+const CACHE = 'cosmic-v6';
 
 // Keep URLs relative to the Service Worker scope.
 // This avoids install failures on GitHub Pages project paths like /CosmicAlmanac/.
